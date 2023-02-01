@@ -15,16 +15,16 @@
 <body>
 <div class="page-wrapper">
 
-
-
 {% include 'main/_embed/_header.html.twig' %}
 
     <main class="main">
+        {% include 'main/_embed/_flash_message.html.twig' %}
         {% block body %}
         {% endblock %}
     </main>
 
 {% include 'main/_embed/_footer.html.twig' %}
+
 </div>
 
 {% block javascripts %}{% endblock %}
