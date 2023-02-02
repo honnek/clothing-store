@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
     /**
      * @return Response
      */
-    #[Route('/', name: 'homepage')]
+    #[Route('/', name: 'main_homepage')]
     public function index(ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
