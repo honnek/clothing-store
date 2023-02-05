@@ -1,0 +1,9 @@
+{% for label, massages in app.flashes(['sucsess', 'warning', 'info']) %}
+    {% if messages|default %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endfor %}

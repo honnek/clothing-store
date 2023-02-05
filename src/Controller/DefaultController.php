@@ -24,8 +24,6 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'main_homepage')]
     public function index(ManagerRegistry $doctrine): Response
     {
-        $entityManager = $doctrine->getManager();
-
         return $this->render('main/default/index.html.twig');
     }
 
