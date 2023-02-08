@@ -9,6 +9,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Класс обработчик форм продукта, обработчик сделан в частности для обработки изображений
+ *
+ * @TODO Add a new image with diff size (Сделано)
+ * 1. сохранение изменений продукта
+ * 2. Сохранение загруженного файла в temp folder
+ *
+ * 3. Провидим работу с продуктом (добавляем изображение в него)
+ * 3.1 получаем путь к папке с картинками
+ * 3.2 изменение рамера и сохранение картинки в папки (BIG, MEDIUM, small)
+ * 3.3 созданем ProductImage и возвращем его продукту
+ * 3.4 Сохраняем продукт вместе с новым productImage
+ */
 class ProductFormHandler
 {
 
@@ -22,15 +35,6 @@ class ProductFormHandler
     }
 
     /**
-     * @TODO Add a new image with diff size
-     * 1. сохранение изменений продукта
-     * 2. Сохранение загруженного файла в temp folder
-     *
-     * 3. Провидим работу с продуктом (добавляем изображение в него)
-     * 3.1 получаем путь к папке с картинками
-     * 3.2 изменение рамера и сохранение картинки в папки (BIG, MEDIUM, small)
-     * 3.3 созданем ProductImage и возвращем его продукту
-     * 3.4 Сохраняем продукт вместе с новым productImage
      *
      * @param Product $product
      * @param FormInterface $form
@@ -47,7 +51,7 @@ class ProductFormHandler
         $this->productManager->updateProductImages($product, $tempImageFile);
 
         $this->productManager->save($product);
-dd($product);
+
         return $product;
     }
 }

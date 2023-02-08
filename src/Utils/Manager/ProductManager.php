@@ -38,15 +38,20 @@ class ProductManager
      * @param Product $product
      * @return void
      */
-    public function save(Product $product)
+    public function save(Product $product): void
     {
         $this->entityManager->persist($product);
         $this->entityManager->flush();
     }
 
-    public function remove()
+    /**
+     * @param Product $product
+     * @return void
+     */
+    public function remove(Product $product): void
     {
-        //////
+        $product->setIsDeleted(true);
+        $this->save($product);
     }
 
     /**

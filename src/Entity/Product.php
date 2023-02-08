@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Сущность "продукт"
@@ -42,6 +43,10 @@ class Product
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $productImages;
+
+    #[Gedmo\Slug(fields: ['title'])]
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -166,6 +171,18 @@ class Product
                 $productImage->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

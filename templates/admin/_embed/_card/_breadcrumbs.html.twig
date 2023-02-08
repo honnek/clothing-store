@@ -1,16 +1,16 @@
 <div class="d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center">
-        <a href="{{ path('admin_product_list') }}" class="font-weight-bold text-primary">Products</a>
+        <a href="{{ actionUrl }}" class="font-weight-bold text-primary">{{ sectionTitle }}</a>
         <div class="ml-2 mr-2">/</div>
         <h6 class="m-0 font-weight-bold text-primary">
-            {% if product %}
+            {% if entity.id %}
             Edit
             {% else %}
             Add new
             {% endif %}
         </h6>
     </div>
-    <a href="{{ path('admin_product_add') }}" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm">
+    <a href="{{ addActionUrl }}" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm">
         <i class="fas fa-plus fa-sm text-white-50"></i> Add new
     </a>
 </div>

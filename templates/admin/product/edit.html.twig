@@ -28,6 +28,15 @@
 
             <div class="form-group row">
                 <div class="col-md-1">
+                    slug
+                </div>
+                <div class="col-md-11">
+                    {{ product.slug }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-1">
                     {{ form_label(form.price) }}
                 </div>
                 <div class="col-md-11">
@@ -62,29 +71,29 @@
                 </div>
             </div>
 
-{#            <div class="form-group row">#}
-{#                <div class="col-md-1">#}
-{#                    {{ form_label(form.size) }}#}
-{#                </div>#}
-{#                <div class="col-md-11">#}
-{#                    {{ form_widget(form.size) }}#}
-{#                    <div class="form-error">#}
-{#                        {{ form_errors(form.size) }}#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
+            {#            <div class="form-group row"> #}
+            {#                <div class="col-md-1"> #}
+            {#                    {{ form_label(form.size) }} #}
+            {#                </div> #}
+            {#                <div class="col-md-11"> #}
+            {#                    {{ form_widget(form.size) }} #}
+            {#                    <div class="form-error"> #}
+            {#                        {{ form_errors(form.size) }} #}
+            {#                    </div> #}
+            {#                </div> #}
+            {#            </div> #}
 
-{#            <div class="form-group row">#}
-{#                <div class="col-md-1">#}
-{#                    {{ form_label(form.category) }}#}
-{#                </div>#}
-{#                <div class="col-md-11">#}
-{#                    {{ form_widget(form.category) }}#}
-{#                    <div class="form-error">#}
-{#                        {{ form_errors(form.category) }}#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
+            {#            <div class="form-group row"> #}
+            {#                <div class="col-md-1"> #}
+            {#                    {{ form_label(form.category) }} #}
+            {#                </div> #}
+            {#                <div class="col-md-11"> #}
+            {#                    {{ form_widget(form.category) }} #}
+            {#                    <div class="form-error"> #}
+            {#                        {{ form_errors(form.category) }} #}
+            {#                    </div> #}
+            {#                </div> #}
+            {#            </div> #}
 
             <div class="form-group row">
                 <div class="col-md-1">
@@ -120,35 +129,36 @@
                 </div>
             </div>
 
-{#            {% if images|length %}#}
-{#                <div class="row">#}
-{#                    <div class="col-md-12">#}
-{#                        <span class="text-gray-600">Current images:</span>#}
-{#                    </div>#}
-{#                </div>#}
+            {% if images|length %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="text-gray-600">Current images:</span>
+                    </div>
+                </div>
 
-{#                {% for image in images %}#}
-{#                    <div class="row mt-2">#}
-{#                        <div class="col-md-5">#}
-{#                            <img src="{{ asset('uploads/images/products/' ~ product.id ~ '/' ~ image.filenameMiddle) }}" alt="{{ image.filenameMiddle }}">#}
-{#                        </div>#}
-{#                        <div class="col-md-7">#}
-{#                            <a href="{{ path('admin_product_image_delete', {#}
-{#                                'id': image.id#}
-{#                            }) }}" class="btn btn-outline-info">#}
-{#                                DELETE#}
-{#                            </a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                {% endfor %}#}
+                {% for image in images %}
+                    <div class="row mt-2">
+                        <div class="col-md-5">
+                            <img src="{{ asset('uploads/images/products/' ~ product.id ~ '/' ~ image.filenameMiddle) }}"
+                                 alt="{{ image.filenameMiddle }}">
+                        </div>
+                        <div class="col-md-7">
+                            <a href="{{ path('admin_product_image_delete', {
+                                'id': image.id
+                            }) }}" class="btn btn-outline-info">
+                                DELETE
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
 
-{#            {% endif %}#}
+            {% endif %}
 
             <hr/>
             {% include 'admin/_embed/_card/_form_buttons.html.twig' with {
                 'entity': product,
                 'catalogRoute': path('admin_product_list')
-            }  %}
+            } %}
             {{ form_rest(form) }}
             {{ form_end(form) }}
         </div>
@@ -160,7 +170,7 @@
             'title': 'Are you sure?',
             'text': 'Product will be deleted.',
             'actionUrl': path('admin_product_delete', {'id': product.id}),
-            'btnText': 'Delete row'
+            'btnText': 'Удалить раздел'
         } %}
     {% endif %}
 {% endblock %}

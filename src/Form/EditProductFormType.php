@@ -49,6 +49,7 @@ class EditProductFormType extends AbstractType
             ])
             ->add('newImage', FileType::class, [
                 'label' => 'Chose new image',
+                'required' => false,
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-check-input',
