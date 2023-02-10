@@ -27,7 +27,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/registration', name: 'main_registration')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function registration(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -51,14 +51,14 @@ class RegistrationController extends AbstractController
                     ->from(new Address('robot@ranked-choice.com', 'Robot'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('main/email/security/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
 
             return $this->redirectToRoute('main_homepage');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('main/security/registration.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }

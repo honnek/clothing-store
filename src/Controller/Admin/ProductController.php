@@ -54,7 +54,6 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('admin_product_edit', ['id' => $product->getId()]);
         }
 
-        /** возможно стоит сделать images = [] по умолчанию */
         return $this->render('admin/product/edit.html.twig', [
             'images' => $product->getProductImages()?->getValues(),
             'product' => $product,
