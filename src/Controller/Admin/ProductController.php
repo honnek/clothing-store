@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use App\Form\DTO\EditProductModel;
 use App\Form\EditProductFormType;
 use App\Form\Handler\ProductFormHandler;
 use App\Repository\ProductRepository;
@@ -35,27 +36,28 @@ class ProductController extends AbstractController
     #[Route('/add', name: 'add')]
     public function edit(
         Request            $request,
-        ManagerRegistry    $managerRegistry,
         ProductFormHandler $productFormHandler,
         Product            $product = null
     ): Response
     {
-        if (!$product) {
-            $product = new Product();
-        }
-
-        $form = $this->createForm(EditProductFormType::class, $product);
+        $editProductModel = EditProductModel::makeFromProduct($product);
+        $form = $this->createForm(EditProductFormType::class, $editProductModel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $product = $productFormHandler->processEditForm($product, $form);
+            $product = $productFormHandler->processEditForm($editProductModel, $form);
+            $this->addFlash('success', 'Изменения были сохранены');
 
             return $this->redirectToRoute('admin_product_edit', ['id' => $product->getId()]);
         }
 
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash('warning', 'Что то пошло не так');
+        }
+
         return $this->render('admin/product/edit.html.twig', [
-            'images' => $product->getProductImages()?->getValues(),
+            'images' => $product?->getProductImages()?->getValues(),
             'product' => $product,
             'form' => $form->createView(),
         ]);
@@ -65,6 +67,8 @@ class ProductController extends AbstractController
     public function delete(Product $product, ProductManager $productManager): Response
     {
         $productManager->remove($product);
+
+        $this->addFlash('warning', 'Продукт ' . $product->getTitle() . ' удален!');
 
         return $this->redirectToRoute('admin_product_list');
     }

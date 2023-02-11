@@ -12,6 +12,12 @@
     {% block stylesheets %}{% endblock %}
 </head>
 
+{% for type, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ type }}">{{ message }}</div>
+    {% endfor %}
+{% endfor %}
+
 {% block layout_body %}{% endblock %}
 <script src="{{ asset('build/section-admin.e07769c5.js') }}"></script>
 </html>
