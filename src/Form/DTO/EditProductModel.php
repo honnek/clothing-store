@@ -2,6 +2,7 @@
 
 namespace App\Form\DTO;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use http\Message;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -22,6 +23,8 @@ class EditProductModel
 
     public string $description;
 
+    public Category $category;
+
     public bool $isPublished;
 
     public bool $isDeleted;
@@ -36,6 +39,7 @@ class EditProductModel
 
         if (!$product) {
             $model->id = null;
+
             return $model;
         }
 
