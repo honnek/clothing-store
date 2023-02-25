@@ -22,7 +22,7 @@ security:
       #            guard:
       #                custom_authenticator:
       custom_authenticator:
-        - App\Security\Admin\LoginFormAuthenticator
+        - App\Security\Authenticator\Admin\LoginFormAuthenticator
       remember_me:
         secret: '%kernel.secret%'
         lifetime: 60400 # неделя
@@ -34,7 +34,7 @@ security:
       #            anonymous: true
       lazy: true
       provider: app_user_provider
-      custom_authenticator: App\Security\LoginFormAuthenticator
+      custom_authenticator: App\Security\Authenticator\Main\LoginFormAuthenticator
       remember_me:
         secret: '%kernel.secret%'
         lifetime: 60400 # неделя

@@ -101,4 +101,16 @@
             </div>
         </div>
     </div>
+<br>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+    {{ render(controller('App\\Controller\\Main\\EmbedController::showSimilarProducts', {
+        'limit': 6,
+    })) }}
 {% endblock %}

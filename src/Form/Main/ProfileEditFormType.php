@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Main;
 
 use App\Entity\User;
-use Doctrine\DBAL\Types\TextType;
-use SebastianBergmann\CodeCoverage\Report\Text;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
