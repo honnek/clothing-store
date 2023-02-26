@@ -38,9 +38,15 @@
                                 {{ order.orderProducts.getValues|length }}
                             </td>
 
-                            <td>
-                                {{ order.totalPrice|format_currency('USD') }}
-                            </td>
+                            {% if order.totalPrice %}
+                                <td>
+                                    {{ order.totalPrice|format_currency('USD') }}
+                                </td>
+                            {% else %}
+                                <td>
+                                     0
+                                </td>
+                            {% endif %}
 
                             <td>
                                 {{ order.owner.email }}
