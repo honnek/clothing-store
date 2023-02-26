@@ -32,6 +32,7 @@ class OrderManager extends AbstractBaseManager
     }
 
     /**
+     * @TODO тупая обертка, можно убрать в контроллер оставить только createOrderFromCart
      * @param string $sessionId
      * @param User $user
      * @return void
@@ -77,8 +78,17 @@ class OrderManager extends AbstractBaseManager
         $this->entityManager->persist($order);
         $this->entityManager->flush();
 
+        /** Удалим корзину, тк после того как мы создали заявку она не нужна */
         $this->cartManager->remove($cart);
-        dd($order);
+    }
+
+    public function save(object $order): void
+    {
+        /** @var Order $order */
+        $order->setUpdatedAt(new \DateTimeImmutable());
+
+        $this->entityManager->persist($order);
+        $this->entityManager->flush();
     }
 
     /**
