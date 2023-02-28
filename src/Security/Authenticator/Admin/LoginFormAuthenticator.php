@@ -2,6 +2,7 @@
 
 namespace App\Security\Authenticator\Admin;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,13 +26,17 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'admin_security_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private UserRepository $userRepository)
     {
     }
 
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
+
+        if ($this->userRepository->findOneBy(['email' => $email])->isIsDeleted()) {
+            throw new \Exception('Вам бан(((((');
+        }
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 

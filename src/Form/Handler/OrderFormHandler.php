@@ -12,7 +12,6 @@ class OrderFormHandler
 
     public function __construct(OrderManager $orderManager)
     {
-
         $this->orderManager = $orderManager;
     }
 
