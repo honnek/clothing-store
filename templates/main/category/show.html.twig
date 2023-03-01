@@ -21,6 +21,7 @@
                     <div class="product-list mb-3">
                         <div class="row justify-content-center">
                             {% for product in products %}
+                                {% if (product.isIsDeleted == false) %}
                                 {% set images = product.getProductImages.getValues %}
                                 {% if images|length %}
                                     {% set cover = images[0] %}
@@ -52,6 +53,7 @@
 
                                         </div>
                                     </div>
+                                {% endif %}
                                 {% endif %}
                             {% endfor %}
 
