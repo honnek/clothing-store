@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\ProductRepository;
@@ -18,13 +20,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Сущность "продукт"
+ *
+ *
+ * @TODO в Post и Patch добавить security: 'ROLE_ADMIN'
  */
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['product:list']]),
-        new Get(),
-        new Post(),
-        new Put(),
+        new Post(normalizationContext: ['groups' => ['product:list:write']], ),
+        new Get(normalizationContext: ['groups' => ['product:item']]),
+        new Patch(normalizationContext: ['groups' => ['product:item:write']], ),
     ]
 )]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -33,21 +38,24 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups("product:list")]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
     #[ORM\Column(type: "uuid")]
-    #[Groups("product:list")]
+    #[ApiProperty(identifier: true)]
+    #[Groups(["product:list", 'product:item'])]
     private ?string $uuid;
 
     #[ORM\Column(length: 255)]
-    #[Groups("product:list")]
+    #[Groups(['product:list', 'product:item', 'product:list:write', 'product:item:write'])]
     private ?string $title;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
+    #[Groups(['product:list', 'product:item', 'product:list:write', 'product:item:write'])]
     private ?string $price = null;
 
     #[ORM\Column]
+    #[Groups(['product:list', 'product:item', 'product:list:write', 'product:item:write'])]
     private ?int $quality = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -70,6 +78,7 @@ class Product
     private ?string $slug = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
+    #[Groups(['product:list', 'product:item', 'product:list:write', 'product:item:write'])]
     private ?Category $category = null;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: CartProduct::class, orphanRemoval: true)]
