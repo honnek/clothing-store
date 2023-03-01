@@ -2,6 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,22 +14,34 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Сущность "продукт"
  */
+#[ApiResource(
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => ['product:list']]),
+        new Get(),
+        new Post(),
+        new Put(),
+    ]
+)]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("product:list")]
     private ?int $id = null;
 
     #[ORM\Column(type: "uuid")]
+    #[Groups("product:list")]
     private ?string $uuid;
 
     #[ORM\Column(length: 255)]
+    #[Groups("product:list")]
     private ?string $title;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
