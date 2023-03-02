@@ -30,7 +30,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(normalizationContext: ['groups' => ['product:list:write']], ),
         new Get(normalizationContext: ['groups' => ['product:item']]),
         new Patch(normalizationContext: ['groups' => ['product:item:write']], ),
-    ]
+    ],
+    formats: [ 'jsonld', 'json'],
+    order: ['id' => 'DESC'],
+    paginationClientItemsPerPage: true,
+    paginationEnabled: true,
 )]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -39,6 +43,7 @@ class Product
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: false)]
+    #[Groups(["product:list"])]
     private ?int $id = null;
 
     #[ORM\Column(type: "uuid")]
