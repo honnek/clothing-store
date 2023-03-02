@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -17,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * Сущность "продукт"
@@ -36,6 +39,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationClientItemsPerPage: true,
     paginationEnabled: true,
 )]
+#[ApiFilter(BooleanFilter::class, properties: ['isPublished'])]
+#[ApiFilter(SearchFilter::class, properties: ['category'])]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
