@@ -21,7 +21,9 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
      .addEntry('section-main', './assets/section-main.js')
-    .addEntry('section-admin', './assets/section-admin.js')
+     .addEntry('section-admin', './assets/section-admin.js')
+
+    .addEntry('appAdminOrder', './assets/js/section/admin/admin-order/app.js')
 
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
@@ -49,6 +51,7 @@ Encore
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSassLoader()
+    .enableVueLoader()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())

@@ -2,6 +2,12 @@
 
 {% block title_detailed %}Edit Order{% endblock %}
 
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('appAdminOrder') }}
+{% endblock %}
+
+
 {% block body %}
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -81,12 +87,7 @@
                     Products:
                 </div>
                 <div class="col-md-11">
-                    {% for orderProduct in order.orderProducts %}
-                        <div>
-                            {% set product = orderProduct.product %}
-                            #{{ product.id }} - {{ product.title }} - Количество: {{ product.quality }} - ${{ orderProduct.pricePerOne }}
-                        </div>
-                    {% endfor %}
+                    <div id="app"></div>
                 </div>
             </div>
 
@@ -99,7 +100,7 @@
                 </div>
             </div>
 
-{#                        <div class="form-group row"> #}
+            {#             <div class="form-group row"> #}
             {#                <div class="col-md-1"> #}
             {#                    {{ form_label(form.size) }} #}
             {#                </div> #}
@@ -142,4 +143,9 @@
             'btnText': 'Удалить раздел'
         } %}
     {% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+        {{ encore_entry_script_tags('appAdminOrder') }}
 {% endblock %}

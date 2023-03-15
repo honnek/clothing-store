@@ -1,7 +1,7 @@
-const $ = require("jquery")
+const $ = require("jquery");
 require("bootstrap")
 
-global.$ = global.jquery = $
+global.$ = global.jquery = $;
 
 require("jquery.easing")
 require("chart.js")
