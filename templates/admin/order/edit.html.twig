@@ -147,5 +147,9 @@
 
 
 {% block javascripts %}
+    <script>
+    window.staticStore = {}
+    window.staticStore.orderProducts = {{ orderProducts|json_encode|raw }};
+    </script>
         {{ encore_entry_script_tags('appAdminOrder') }}
 {% endblock %}

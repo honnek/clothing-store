@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
+use App\Entity\OrderProduct;
+use App\Entity\Product;
 use App\Entity\StaticStorage\OrderStatus;
 use App\Form\Admin\EditOrderFormType;
 use App\Form\Handler\OrderFormHandler;
@@ -53,8 +55,18 @@ class OrderController extends AbstractController
             $this->addFlash('warning', 'Что то пошло не так');
         }
 
+        $orderProducts = [];
+        /** @var OrderProduct $product */
+        foreach ($order->getOrderProducts()->getValues() as $product) {
+            $orderProducts[] = [
+                'title' => $product->getProduct()->getTitle(),
+                'quality' => $product->getProduct()->getQuality(),
+            ];
+        }
+
         return $this->render('admin/order/edit.html.twig', [
             'order' => $order,
+            'orderProducts' => $orderProducts,
             'form' => $form->createView(),
         ]);
     }
