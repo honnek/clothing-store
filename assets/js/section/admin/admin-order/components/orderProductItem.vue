@@ -1,27 +1,27 @@
 <template>
-  <div class="row mb-1">
+  <div class="row">
 
-    <div class="col-mb-8">
+    <div class="col">
       {{ rowNumber }}
     </div>
 
-    <div class="col-mb-1">
+    <div class="col">
       {{ productTitle }}
     </div>
 
-    <div class="col-mb-3">
+    <div class="col">
       {{ categoryTitle }}
     </div>
 
-    <div class="col-mb-2">
+    <div class="col">
       {{ orderProduct.quality }}
     </div>
 
-    <div class="col-mb-2">
+    <div class="col">
       ${{ orderProduct.pricePerOne }}
     </div>
 
-    <div class="col-mb-3">
+    <div class="col">
       <button class="btn btn-outline-info" @click="viewDetails">
         Details
       </button>
@@ -35,7 +35,7 @@
 
 <script>
 import products from "../store/modules/products";
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import {getUrlViewProduct} from "../../../../utils/url-generator";
 
 export default {
@@ -64,12 +64,18 @@ export default {
     },
   },
   methods: {
+    ...mapActions("products", ["removeOrderProduct"]),
     viewDetails(event) {
       event.preventDefault();
 
       const url = getUrlViewProduct(this.staticStore.url.viewProduct, this.orderProduct.product.id);
 
       window.open(url, "_blank").focus()
+    },
+    remove(event) {
+      event.preventDefault();
+
+      this.removeOrderProduct(this.orderProduct.id);
     }
   }
 }

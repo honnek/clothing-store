@@ -2,16 +2,31 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\OrderProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+
+/**
+ * @TODO в ApiResource добавить security: 'ROLE_ADMIN'
+ */
+#[ApiResource(
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => ['order_product:list']]),
+        new Delete(formats: [ 'jsonld', 'json']),
+    ]
+)]
 #[ORM\Entity(repositoryClass: OrderProductRepository::class)]
 class OrderProduct
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["order_product:list"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderProducts')]
