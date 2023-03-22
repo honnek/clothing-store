@@ -11,3 +11,13 @@ export function getUrlViewProduct(viewUrl, productId) {
 export function concatUrlByParams(...params) {
     return params.join("/");
 }
+
+export function getUrlProductsByCategory(defaultUrl, categoryId, page, countLimit) {
+    return (
+        defaultUrl +
+        "?category=" + categoryId +
+        "&isPublished=true" +
+        "&page=" + page +
+        "&itemsPerPage=" + countLimit
+    )
+}

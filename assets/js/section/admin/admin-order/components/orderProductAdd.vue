@@ -6,6 +6,7 @@
           v-model="form.category"
           name="add_product_category_select"
           class="form-control"
+          @change="getProducts()"
       >
 
         <option value="disabled"> - choose option -</option>
@@ -67,7 +68,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 
 export default {
   name: "orderProductAdd",
@@ -83,6 +84,14 @@ export default {
   },
   computed: {
     ...mapState("products", ["categories"])
+  },
+  methods: {
+    ...mapMutations("products", ["setNewProductInfo"]),
+    ...mapActions("products", ["getProductsByCategory"]),
+    getProducts() {
+      this.setNewProductInfo(this.form)
+      this.getProductsByCategory()
+    }
   }
 }
 </script>

@@ -150,9 +150,10 @@
     <script>
     window.staticStore = {}
     window.staticStore.orderId = "{{ order ? order.id : '' }}"
-    window.staticStore.orderProducts = {{ orderProducts|json_encode|raw }};
+    window.staticStore.orderProducts = {{ orderProducts|json_encode|raw }}
     window.staticStore.urlViewProduct = '{{ path('admin_product_edit_blank') }}'
     window.staticStore.urlApiCategory = '{{ path('_api_/categories{._format}_get_collection') }}'
+    window.staticStore.urlApiProduct = '{{ path('_api_/products{._format}_get_collection') }}'
     window.staticStore.urlApiOrderProduct = '{{ path('_api_/order_products{._format}_get_collection') }}'
     </script>
         {{ encore_entry_script_tags('appAdminOrder') }}
