@@ -57,6 +57,7 @@ class OrderController extends AbstractController
 
         $orderProducts = [];
         /** @var OrderProduct $product */
+        /** @TODO Удалить $orderProducts */
 //        foreach ($order->getOrderProducts()->getValues() as $product) {
 //            $orderProducts[] = [
 //                'id' => $product->getId(),
