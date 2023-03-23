@@ -2,12 +2,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => ['order:list']]),
+        new Post(normalizationContext: ['groups' => ['order:list:write']]),
+        new Delete(formats: [ 'jsonld', 'json']),
+        new Get(normalizationContext: ['groups' => ['order:item']]),
+    ]
+)]
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
 class Order
@@ -15,6 +29,7 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["order:item"])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -25,9 +40,11 @@ class Order
     private ?User $owner = null;
 
     #[ORM\Column]
+    #[Groups(["order:item"])]
     private ?int $status = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["order:item"])]
     private ?float $totalPrice = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -37,6 +54,7 @@ class Order
     private ?bool $isDeleted = null;
 
     #[ORM\OneToMany(mappedBy: 'appOrder', targetEntity: OrderProduct::class)]
+    #[Groups(["order:item"])]
     private Collection $orderProducts;
 
     public function __construct()

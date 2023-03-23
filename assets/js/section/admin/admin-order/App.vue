@@ -5,7 +5,7 @@
     />
     <hr/>
     <orderProductItem
-        v-for="(orderProduct, index) in staticStore.orderProducts"
+        v-for="(orderProduct, index) in orderProducts"
         :key="orderProduct.id"
         :order-product="orderProduct"
         :index="index"
@@ -24,15 +24,16 @@ export default {
   components: {OrderProductAdd, OrderProductItem},
   created() {
     this.getCategories()
+    this.getOrderProducts()
   },
   computed: {
-    ...mapState("products", ["staticStore"]),
+    ...mapState("products", ["orderProducts"]),
     productsCount: () => {
       return 123;
     }
   },
   methods: {
-    ...mapActions("products", ["getCategories"])
+    ...mapActions("products", ["getCategories", "getOrderProducts"])
   }
 }
 </script>

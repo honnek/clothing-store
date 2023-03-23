@@ -26,11 +26,11 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['category:list', 'category:item', 'product:list', 'product:item'])]
+    #[Groups(['category:list', 'category:item', 'product:list', 'product:item', "order:item"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(["category:list", 'category:item', 'product:list', 'product:item'])]
+    #[Groups(["category:list", 'category:item', 'product:list', 'product:item', "order:item"])]
     private ?string $title = null;
 
     #[Gedmo\Slug(fields: ['title'])]

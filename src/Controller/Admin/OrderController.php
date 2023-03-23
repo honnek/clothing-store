@@ -57,21 +57,23 @@ class OrderController extends AbstractController
 
         $orderProducts = [];
         /** @var OrderProduct $product */
-        foreach ($order->getOrderProducts()->getValues() as $product) {
-            $orderProducts[] = [
-                'id' => $product->getId(),
-                'product' => [
-                    'id' => $product->getProduct()->getId(),
-                    'title' => $product->getProduct()->getTitle(),
-                    'category' => [
-                        'id' => $product->getProduct()->getCategory()->getId(),
-                        'title' => $product->getProduct()->getCategory()->getTitle(),
-                    ]
-                ],
-                'quality' => $product->getProduct()->getQuality(),
-                'pricePerOne' => $product->getPricePerOne(),
-            ];
-        }
+//        foreach ($order->getOrderProducts()->getValues() as $product) {
+//            $orderProducts[] = [
+//                'id' => $product->getId(),
+//                'product' => [
+//                    'id' => $product->getProduct()->getId(),
+//                    'title' => $product->getProduct()->getTitle(),
+//                    'price' => $product->getProduct()->getPrice(),
+//                    'quantity' => $product->getProduct()->getQuality(),
+//                    'category' => [
+//                        'id' => $product->getProduct()->getCategory()->getId(),
+//                        'title' => $product->getProduct()->getCategory()->getTitle(),
+//                    ]
+//                ],
+//                'quantity' => $product->getProduct()->getQuality(),
+//                'pricePerOne' => $product->getPricePerOne(),
+//            ];
+//        }
 
         return $this->render('admin/order/edit.html.twig', [
             'order' => $order,
