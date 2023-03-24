@@ -54,10 +54,10 @@ class OrderManager extends AbstractBaseManager
      */
     public function createOrderFromCart(Cart $cart, User $user)
     {
-        $totalPrice = 50;
         $order = new Order();
         $order->setStatus(OrderStatus::CREATED);
         $order->setOwner($user);
+        $totalPrice = 0;
 
         foreach ($cart->getCartProducts() as $cartProduct) {
             $orderProduct = new OrderProduct();
@@ -66,9 +66,9 @@ class OrderManager extends AbstractBaseManager
             $orderProduct->setQuantity($cartProduct->getQuantity());
             $orderProduct->setPricePerOne($cartProduct->getProduct()->getPrice());
 
-            $order->addOrderProduct($orderProduct);
-
             $totalPrice += $orderProduct->getQuantity() * $orderProduct->getPricePerOne();
+
+            $order->addOrderProduct($orderProduct);
 
             $this->entityManager->persist($orderProduct);
         }
@@ -80,6 +80,22 @@ class OrderManager extends AbstractBaseManager
 
         /** Удалим корзину, тк после того как мы создали заявку она не нужна */
         $this->cartManager->remove($cart);
+    }
+
+    /**
+     * @param Order $order
+     * @return void
+     */
+    public function recalculateOrderTotalPrice(Order $order): void
+    {
+        $totalPrice = 0;
+
+        /** @var OrderProduct $orderProduct */
+        foreach ($order->getOrderProducts()->getValues() as $orderProduct) {
+            $totalPrice += $orderProduct->getQuantity() * $orderProduct->getPricePerOne();
+        }
+
+        $order->setTotalPrice($totalPrice);
     }
 
     public function save(object $order): void

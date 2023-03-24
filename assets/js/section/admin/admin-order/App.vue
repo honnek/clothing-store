@@ -12,6 +12,9 @@
     />
     <hr/>
 
+    <total-price-block/>
+    <hr/>
+
   </div>
 </template>
 
@@ -19,9 +22,10 @@
 import {mapActions, mapState} from "vuex";
 import OrderProductItem from "./components/orderProductItem.vue";
 import OrderProductAdd from "./components/orderProductAdd.vue";
+import TotalPriceBlock from "./components/totalPriceBlock.vue";
 
 export default {
-  components: {OrderProductAdd, OrderProductItem},
+  components: {TotalPriceBlock, OrderProductAdd, OrderProductItem},
   created() {
     this.getCategories()
     this.getOrderProducts()
