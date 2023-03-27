@@ -6,14 +6,16 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
+use App\Entity\Cart;
 use App\Entity\Product;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Может рассматриваться как дополнение к каждому запросу продуктов некого условия
+ * Фильтр реализует дополнение к каждому запросу корзины некого условия
  * (срабатывает при обращении по Api)
  */
-class FilterProductQuery implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+class FilterCartQuery implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
 
     public function applyToCollection(
@@ -41,14 +43,15 @@ class FilterProductQuery implements QueryCollectionExtensionInterface, QueryItem
 
     private function andWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (Product::class !== $resourceClass) {
+        if (Cart::class !== $resourceClass) {
             return;
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
+        $sessionId = (Request::createFromGlobals())->cookies->get('PHPSESSID');
 
         $queryBuilder->andWhere(
-            sprintf("%s.isDeleted = '0'", $rootAlias)
+            sprintf("%s.sessionId = '%s'", $rootAlias, $sessionId)
         );
     }
 }

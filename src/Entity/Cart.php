@@ -2,21 +2,37 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => ['cart:list']]),
+        new Post(normalizationContext: ['groups' => ['cart:list:write']]),
+        new Delete(formats: [ 'jsonld', 'json']),
+        new Get(normalizationContext: ['groups' => ['cart:item']]),
+    ]
+)]
 #[ORM\Entity(repositoryClass: CartRepository::class)]
 class Cart
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["cart:item", "cart:list"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["cart:item", "cart:list"])]
     private ?string $sessionId = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -26,6 +42,7 @@ class Cart
     private Collection $product;
 
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartProduct::class, orphanRemoval: true)]
+    #[Groups(["cart:item", "cart:list"])]
     private Collection $cartProducts;
 
     public function __construct()

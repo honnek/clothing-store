@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import products from "../store/modules/products";
 import {mapActions, mapState} from "vuex";
 import {getUrlViewProduct} from "../../../../utils/url-generator";
 import {getProductInformativeTitle} from "../../../../utils/title-formatter";
