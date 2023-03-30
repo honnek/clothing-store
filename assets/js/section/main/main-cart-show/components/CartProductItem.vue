@@ -33,6 +33,7 @@
           class="form-control"
           min="1"
           step="1"
+          @focusout="updateQuantity()"
       >
     </td>
     <td class="total-col">
@@ -69,6 +70,9 @@ export default {
       }
     },
   },
+  created() {
+    this.quantity = this.cartProduct.quantity
+  },
   computed: {
     ...mapState("cart", ["staticStore"]),
     productImage() {
@@ -84,7 +88,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("cart", ["removeCartProduct"]),
+    ...mapActions("cart", ["removeCartProduct", "updateCartProductQuantity"]),
     getUrlProductImage(productImage) {
       return (
           this.staticStore.url.assetImageProducts + "/" +
@@ -92,8 +96,13 @@ export default {
           productImage.filenameSmall
       )
     },
-    removeCartProduct() {
-      return true
+    updateQuantity() {
+      const payload = {
+        cartProductId: this.cartProduct.id,
+        newQuantity: this.quantity
+      }
+
+      this.updateCartProductQuantity(payload)
     }
   }
 }
