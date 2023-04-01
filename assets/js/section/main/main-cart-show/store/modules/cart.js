@@ -5,6 +5,10 @@ import {concatUrlByParams} from "../../../../../utils/url-generator";
 
 const state = () => ({
     cart: {},
+    alert: {
+        type: null,
+        message: null
+    },
     staticStore: {
         url: {
             apiCart: window.staticStore.urlCart,
@@ -15,7 +19,23 @@ const state = () => ({
     }
 });
 
-const getters = {};
+const getters = {
+    totalPrice(state) {
+        let result = 0
+
+        if (!state.cart.cartProducts) {
+            return 0;
+        }
+
+        state.cart.cartProducts.forEach(
+            cartProduct => {
+                result += cartProduct.product.price * cartProduct.quantity
+            }
+        )
+
+        return result
+    }
+};
 
 const actions = {
     async getCart({state, commit}) {
@@ -26,7 +46,7 @@ const actions = {
             commit("setCart", result.data["hydra:member"][0])
         }
     },
-    async removeCartProduct({state, dispatch}, cartProductId) {
+    async removeCartProduct({state, dispatch, commit}, cartProductId) {
         const url = concatUrlByParams(state.staticStore.url.apiCartProduct, cartProductId)
         const result = await axios.delete(url, apiContent)
 
@@ -36,7 +56,6 @@ const actions = {
     },
     async updateCartProductQuantity({state, dispatch}, payload) {
         const url = concatUrlByParams(state.staticStore.url.apiCartProduct, payload.cartProductId)
-
         const data = {
             quantity: parseInt(payload.newQuantity)
         }
@@ -52,6 +71,18 @@ const actions = {
 const mutations = {
     setCart(state, cart) {
         state.cart = cart
+    },
+    setAlert(state, data) {
+        state.alert = {
+            type: data.type,
+            message: data.message
+        }
+    },
+    cleanAlert(state) {
+        state.alert = {
+            type: null,
+            message: null
+        }
     }
 };
 
