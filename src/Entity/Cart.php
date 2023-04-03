@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['cart:list']]),
         new Post(normalizationContext: ['groups' => ['cart:list:write']]),
-        new Delete(formats: [ 'jsonld', 'json']),
+        new Delete(),
         new Get(normalizationContext: ['groups' => ['cart:item']]),
     ]
 )]

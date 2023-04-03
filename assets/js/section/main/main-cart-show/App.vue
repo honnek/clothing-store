@@ -21,7 +21,7 @@
 <script>
 import CartProductList from "./components/CartProductList.vue";
 import CartTotalPrice from "./components/CartTotalPrice.vue";
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 import Alert from "./components/Alert.vue";
 
 export default {
@@ -31,15 +31,13 @@ export default {
       return this.getCart()
   },
   computed: {
+    ...mapState("cart", ["isSentForm"]),
     showCartContent() {
-      return true
+      return !this.isSentForm
     }
   },
   methods: {
-    ...mapActions("cart", ["getCart"]),
-    makeOrder() {
-      return true
-    }
+    ...mapActions("cart", ["getCart", "makeOrder"]),
   }
 }
 </script>

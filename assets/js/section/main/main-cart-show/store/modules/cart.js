@@ -9,12 +9,15 @@ const state = () => ({
         type: null,
         message: null
     },
+    isSentForm: false,
+
     staticStore: {
         url: {
             apiCart: window.staticStore.urlCart,
             viewProduct: window.staticStore.urlViewProduct,
             assetImageProducts: window.staticStore.urlAssetImageProducts,
-            apiCartProduct: window.staticStore.urlCartProduct
+            apiCartProduct: window.staticStore.urlCartProduct,
+            apiOrder: window.staticStore.urlOrder
         }
     }
 });
@@ -46,6 +49,14 @@ const actions = {
             commit("setCart", result.data["hydra:member"][0])
         }
     },
+    async cleanCart({state, commit}) {
+        const url = concatUrlByParams(state.staticStore.url.apiCart, state.cart.id)
+        const result = await axios.delete(url, apiContent)
+
+        if (result.status === StatusCodes.NO_CONTENT) {
+            commit("setCart", {})
+        }
+    },
     async removeCartProduct({state, dispatch, commit}, cartProductId) {
         const url = concatUrlByParams(state.staticStore.url.apiCartProduct, cartProductId)
         const result = await axios.delete(url, apiContent)
@@ -65,6 +76,25 @@ const actions = {
         if (result.status === StatusCodes.OK) {
             dispatch("getCart")
         }
+    },
+    async makeOrder({state, commit, dispatch}) {
+        const url = state.staticStore.url.apiOrder
+        const data = {
+            cartId: state.cart.id
+        }
+
+        // const result = await axios.post(url, data, apiContent)
+
+        // if (result.data && result.status === StatusCodes.CREATED) {
+        commit("setAlert", {
+            type: 'success',
+            message: 'Thank you for your purchase! '
+        })
+
+        commit("setIsSendForm", true)
+
+        dispatch("cleanCart")
+        // }
     }
 };
 
@@ -83,6 +113,9 @@ const mutations = {
             type: null,
             message: null
         }
+    },
+    setIsSendForm(state, value) {
+        state.isSentForm = value
     }
 };
 

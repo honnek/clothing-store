@@ -34,6 +34,7 @@
         window.staticStore.urlViewProduct = '{{ path('main_product_show_blank') }}'
         window.staticStore.urlAssetImageProducts = '{{ asset('uploads/images/products') }}'
         window.staticStore.urlCartProduct = '{{ path('_api_/cart_products{._format}_get_collection') }}'
+        window.staticStore.urlOrder = '{{ path('_api_/orders{._format}_get_collection') }}'
     </script>
     {{ encore_entry_script_tags('appMainCartShow') }}
 {% endblock %}
