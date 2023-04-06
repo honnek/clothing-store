@@ -31,9 +31,9 @@ export default {
       return this.getCart()
   },
   computed: {
-    ...mapState("cart", ["isSentForm"]),
+    ...mapState("cart", ["cart", "isSentForm"]),
     showCartContent() {
-      return !this.isSentForm
+      return !this.isSentForm && Object.keys(this.cart).length > 0
     }
   },
   methods: {

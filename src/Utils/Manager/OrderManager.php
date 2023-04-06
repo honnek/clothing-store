@@ -48,32 +48,38 @@ class OrderManager extends AbstractBaseManager
 
     }
 
+    public function addOrderProductsFromCarts(Order $order, int $cartId): void
+    {
+        /** @var Cart $cart */
+        $cart = $this->cartManager->getRepository()->find($cartId);
+        if ($cart) {
+            foreach ($cart->getCartProducts() as $cartProduct) {
+                $orderProduct = new OrderProduct();
+                $orderProduct->setAppOrder($order);
+                $orderProduct->setProduct($cartProduct->getProduct());
+                $orderProduct->setQuantity($cartProduct->getQuantity());
+                $orderProduct->setPricePerOne($cartProduct->getProduct()->getPrice());
+
+                $order->addOrderProduct($orderProduct);
+
+                $this->entityManager->persist($orderProduct);
+            }
+        }
+    }
+
     /**
      * @param Cart $cart
      * @param User $user
      */
-    public function createOrderFromCart(Cart $cart, User $user)
+    public function createOrderFromCart(Cart $cart, User $user): void
     {
         $order = new Order();
         $order->setStatus(OrderStatus::CREATED);
         $order->setOwner($user);
-        $totalPrice = 0;
 
-        foreach ($cart->getCartProducts() as $cartProduct) {
-            $orderProduct = new OrderProduct();
-            $orderProduct->setAppOrder($order);
-            $orderProduct->setProduct($cartProduct->getProduct());
-            $orderProduct->setQuantity($cartProduct->getQuantity());
-            $orderProduct->setPricePerOne($cartProduct->getProduct()->getPrice());
+        $this->addOrderProductsFromCarts($order, $cart->getId());
 
-            $totalPrice += $orderProduct->getQuantity() * $orderProduct->getPricePerOne();
-
-            $order->addOrderProduct($orderProduct);
-
-            $this->entityManager->persist($orderProduct);
-        }
-
-        $order->setTotalPrice($totalPrice);
+        $this->recalculateOrderTotalPrice($order);
 
         $this->entityManager->persist($order);
         $this->entityManager->flush();

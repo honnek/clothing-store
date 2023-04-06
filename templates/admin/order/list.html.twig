@@ -48,13 +48,21 @@
                                 </td>
                             {% endif %}
 
+                            {% if order.owner %}
                             <td>
                                 {{ order.owner.email }}
                             </td>
+                            {% endif %}
 
+                            {% if order.status %}
                             <td>
                                 {{ statuses[order.status] }}
                             </td>
+                            {% else %}
+                                <td>
+                                    {{ statuses[0] }}
+                                </td>
+                            {% endif %}
 
                             <td>
                                 <a href="{{ path('admin_order_edit', {'id': order.id}) }}" class="btn btn-outline-info">Edit</a>

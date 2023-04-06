@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['order:list']]),
         new Post(normalizationContext: ['groups' => ['order:list:write']]),
-        new Delete(formats: [ 'jsonld', 'json']),
+        new Delete(formats: ['jsonld', 'json']),
         new Get(normalizationContext: ['groups' => ['order:item']]),
     ]
 )]
@@ -35,8 +35,8 @@ class Order
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $owner = null;
 
     #[ORM\Column]
