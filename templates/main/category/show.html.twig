@@ -66,13 +66,9 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script>
-        const urlSaveProduct = 'https://127.0.0.1:8000/api/cart'
         function addProductToCart(uuid) {
-            const formData = new FormData()
-            formData.append('productId', uuid)
-            axios.post(urlSaveProduct, formData)
+            window.vueMenuCartInstance.addCartProduct({ uuid })
         }
     </script>
 {% endblock %}

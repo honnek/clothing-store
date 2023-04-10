@@ -30,7 +30,7 @@
                             </div>
 
                             <div class="product-content">
-                                <p>product.description</p>
+                                <p>{{ product.description }}</p>
                             </div>
 
                             <div class="product-full-filters">
@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="product-full-action">
-                                <a href="#" class="btn btn-link btn-dark">
+                                <a href="#" class="btn btn-link btn-dark" onclick="addProductToCart()">
                                     <i class="fas fa-cart-plus"></i>
                                     <span>add to cart</span>
                                 </a>
@@ -76,4 +76,17 @@
 
 {% endblock %}
 
+{% block javascripts %}
+    <script>
+        const productUuid = '{{ product.uuid }}'
+        const productQuantityEl = document.getElementById('product_full_filter_quantity')
 
+        function addProductToCart() {
+            quantity = parseInt(productQuantityEl.value)
+            window.vueMenuCartInstance.addCartProduct({
+                uuid: productUuid,
+                quantity: quantity
+            })
+        }
+    </script>
+{% endblock %}

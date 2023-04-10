@@ -38,12 +38,14 @@ const getters = {
 
 
 const actions = {
-    async getCart({state, commit}) {
+    async getCart({state, commit, dispatch}) {
         const url = state.staticStore.url.apiCart
         const result = await axios.get(url, apiContent)
 
         if (result.data && result.data["hydra:member"].length && result.status === StatusCodes.OK) {
             commit("setCart", result.data["hydra:member"][0])
+        } else {
+            dispatch("createCart")
         }
     },
     async cleanCart({state, commit}) {
@@ -59,6 +61,58 @@ const actions = {
         const result = await axios.delete(url, apiContent)
 
         if (result.status === StatusCodes.NO_CONTENT) {
+            dispatch("getCart")
+        }
+    },
+    addCartProduct({ state, dispatch }, productData) {
+        if (!productData.quantity) {
+            productData.quantity = 1
+        }
+
+        const existCartProduct = state.cart.cartProducts.find(
+            cartProduct => cartProduct.product.uuid === productData.uuid
+        )
+
+        if (existCartProduct) {
+            dispatch("addExistCartProduct", {
+                cartProductId: existCartProduct.id,
+                quantity: existCartProduct.quantity + productData.quantity
+            })
+        } else {
+            dispatch("addNewCartProduct", productData)
+        }
+    },
+    async createCart({ state, dispatch }) {
+        const url = state.staticStore.url.apiCart
+
+        const result = await axios.post(url, {}, apiContent)
+
+        if (result.data && result.status === StatusCodes.CREATED) {
+            dispatch("getCart")
+        }
+    },
+    async addExistCartProduct({ state, dispatch }, cartProductData) {
+        const url = concatUrlByParams(state.staticStore.url.apiCartProduct, cartProductData.cartProductId)
+        const data = {
+            quantity: cartProductData.quantity
+        }
+
+        const result = await axios.patch(url, data, apiConfigPatch)
+
+        if (result.status === StatusCodes.OK) {
+            dispatch("getCart")
+        }
+    },
+    async addNewCartProduct({ state, dispatch }, productData) {
+        const url = state.staticStore.url.apiCartProduct
+        const data = {
+            cart: "api/carts/" + state.cart.id,
+            product: "api/products/" + productData.uuid,
+            quantity: productData.quantity
+        }
+
+        const result = await axios.post(url, data, apiContent)
+        if (result.data && result.status === StatusCodes.CREATED) {
             dispatch("getCart")
         }
     }
