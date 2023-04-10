@@ -44,11 +44,6 @@ const actions = {
 
         if (result.data && result.data["hydra:member"].length && result.status === StatusCodes.OK) {
             commit("setCart", result.data["hydra:member"][0])
-        } else {
-            commit("setAlert", {
-                type: 'info',
-                message: 'Your cart empty!'
-            })
         }
     },
     async cleanCart({state, commit}) {

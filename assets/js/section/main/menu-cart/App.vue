@@ -1,6 +1,6 @@
 <template>
     <div class="dropdown cart-dropdown">
-        <a href="#" class="cart-dropdown-btn-toggle">
+        <a href="/cart" class="cart-dropdown-btn-toggle">
             <i class="fas fa-shopping-cart"></i>
             <span class="count">{{ countCartProducts }}</span>
         </a>
@@ -14,10 +14,12 @@
 
             />
 
-
-            <CartActions
-
-            />
+            <div v-if="countCartProducts">
+                <CartActions/>
+            </div>
+            <div v-else>
+                Ваша корзина пуста ...
+            </div>
 
         </div>
     </div>
