@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Main;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -20,6 +20,7 @@ class ChangePasswordFormType extends AbstractType
                 'options' => [
                     'attr' => [
                         'autocomplete' => 'new-password',
+                        'class' => 'form-control',
                     ],
                 ],
                 'first_options' => [

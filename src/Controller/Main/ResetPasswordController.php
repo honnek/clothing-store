@@ -3,8 +3,8 @@
 namespace App\Controller\Main;
 
 use App\Entity\User;
-use App\Form\ChangePasswordFormType;
-use App\Form\ResetPasswordRequestFormType;
+use App\Form\Main\ChangePasswordFormType;
+use App\Form\Main\ResetPasswordRequestFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -160,7 +160,7 @@ class ResetPasswordController extends AbstractController
             ->from(new Address('robot@ranked-choice.com', 'Robot'))
             ->to($user->getEmail())
             ->subject('Your password reset request')
-            ->htmlTemplate('main/reset_password/email.html.twig')
+            ->htmlTemplate('main/email/security/reset_password.html.twig')
             ->context([
                 'resetToken' => $resetToken,
             ])

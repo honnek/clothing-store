@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Main;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -14,7 +14,10 @@ class ResetPasswordRequestFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'attr' => ['autocomplete' => 'email'],
+                'attr' => [
+                    'autocomplete' => 'email',
+                    'class' => 'form-control'
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter your email',
