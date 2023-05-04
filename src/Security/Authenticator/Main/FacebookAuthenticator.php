@@ -13,6 +13,7 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use League\OAuth2\Client\Provider\FacebookUser;
+use League\OAuth2\Client\Provider\GoogleUser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,51 +27,45 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
-class FacebookAuthenticator extends SocialAuthenticator
+class FacebookAuthenticator extends OAuth2Authenticator implements AuthenticationEntrypointInterface
 {
     private ClientRegistry $clientRegistry;
     private UserManager $userManager;
     private RouterInterface $router;
-
-    private SessionInterface $session;
-
     private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
         ClientRegistry  $clientRegistry,
         UserManager     $userManager,
         RouterInterface $router,
-        SessionInterface $session,
         EventDispatcherInterface $eventDispatcher,
     )
     {
         $this->clientRegistry = $clientRegistry;
         $this->userManager = $userManager;
         $this->router = $router;
-        $this->session = $session;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function supports(Request $request): ?bool
     {
-        // continue ONLY if the current ROUTE matches the check ROUTE
-        return $request->attributes->get('_route') === 'connect_facebook_check';
+        return true;
     }
 
-    public function authenticate(Request $request)
+    public function authenticate(Request $request): Passport
     {
-        $client = $this->clientRegistry->getClient('facebook_main');
+        $client = $this->clientRegistry->getClient('google_main');
         $accessToken = $this->fetchAccessToken($client);
 
         return new SelfValidatingPassport(
             new UserBadge($accessToken->getToken(), function () use ($accessToken, $client) {
-                /** @var FacebookUser $facebookUser */
-                $facebookUser = $client->fetchUserFromToken($accessToken);
+                /** @var GoogleUser $googleUser */
+                $googleUser = $client->fetchUserFromToken($accessToken);
 
-                $email = $facebookUser->getEmail();
+                $email = $googleUser->getEmail();
 
-                // 1) have they logged in with Facebook before? Easy!
-                $existingUser = $this->userManager->getRepository()->findOneBy(['facebookId' => $facebookUser->getId()]);
+                // 1) have they logged in with Google before? Easy!
+                $existingUser = $this->userManager->getRepository()->findOneBy(['googleId' => $googleUser->getId()]);
 
                 if ($existingUser) {
                     return $existingUser;
@@ -80,7 +75,7 @@ class FacebookAuthenticator extends SocialAuthenticator
                 $user = $this->userManager->getRepository()->findOneBy(['email' => $email]);
 
                 if (!$user) {
-                    $user = UserFactory::createFromFacebookUser($facebookUser);
+                    $user = UserFactory::createFromGoogleUser($googleUser);
                     $user->setEmail($email);
 
                     $plainPassword = PasswordGenerator::generatePassword();
@@ -93,7 +88,7 @@ class FacebookAuthenticator extends SocialAuthenticator
 
                 // 3) Maybe you just want to "register" them by creating
                 // a User object
-                $user->setFacebookId($facebookUser->getId());
+                $user->setGoogleId($googleUser->getId());
                 $this->userManager->save($user);
 
                 return $user;

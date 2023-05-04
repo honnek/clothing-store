@@ -7204,7 +7204,6 @@
                 "symfony/event-dispatcher": "<5.4",
                 "symfony/http-foundation": "<5.4",
                 "symfony/ldap": "<5.4",
-                "symfony/security-guard": "<5.4",
                 "symfony/validator": "<5.4"
             },
             "require-dev": {

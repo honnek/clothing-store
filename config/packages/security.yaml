@@ -20,7 +20,6 @@ security:
       #            anonymous: true
       lazy: true
       provider: app_user_provider
-      #            guard:
       #                custom_authenticator:
       custom_authenticator:
         - App\Security\Authenticator\Admin\LoginFormAuthenticator
@@ -35,10 +34,13 @@ security:
       #            anonymous: true
       lazy: true
       provider: app_user_provider
-      custom_authenticator:
-        - App\Security\Authenticator\Main\LoginFormAuthenticator
+      custom_authenticators:
 #        - App\Security\Authenticator\Main\FacebookAuthenticator
-#        - App\Security\Authenticator\Main\GoogleAuthenticator
+        - App\Security\Authenticator\Main\GoogleAuthenticator
+        - App\Security\Authenticator\Main\LoginFormAuthenticator
+
+      entry_point: App\Security\Authenticator\Main\LoginFormAuthenticator
+
       remember_me:
         secret: '%kernel.secret%'
         lifetime: 60400 # неделя
