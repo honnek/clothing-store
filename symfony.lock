@@ -48,6 +48,9 @@
             "./migrations/.gitignore"
         ]
     },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v6.2.0"
+    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "2.14",
         "recipe": {

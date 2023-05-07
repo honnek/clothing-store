@@ -15,6 +15,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "imagine/imagine": "1.2",
+        "knplabs/knp-paginator-bundle": "^6.2",
         "knpuniversity/oauth2-client-bundle": "^2.14",
         "league/oauth2-facebook": "^2.2",
         "league/oauth2-google": "^4.0",

@@ -19,10 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     #[Route('/list', name: 'list')]
-    public function list(OrderRepository $orderRepository): Response
+    public function list(Request $request, OrderFormHandler $orderFormHandler, OrderRepository $orderRepository): Response
     {
+        $filterForm = '';
+        $pagination = $orderFormHandler->processOrderFiltersForm($request, $filterForm);
+
         return $this->render('admin/order/list.html.twig', [
-            'orders' => $orderRepository->findBy(['isDeleted' => false], ['id' => 'DESC']),
+            'pagination' => $pagination,
             'statuses' => OrderStatus::getList(),
         ]);
     }

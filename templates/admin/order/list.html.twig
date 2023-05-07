@@ -24,7 +24,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for order in orders %}
+                    {% for order in pagination %}
                         <tr>
                             <td>
                                 {{ order.id }}
@@ -44,20 +44,20 @@
                                 </td>
                             {% else %}
                                 <td>
-                                     0
+                                    0
                                 </td>
                             {% endif %}
 
                             {% if order.owner %}
-                            <td>
-                                {{ order.owner.email }}
-                            </td>
+                                <td>
+                                    {{ order.owner.email }}
+                                </td>
                             {% endif %}
 
                             {% if order.status %}
-                            <td>
-                                {{ statuses[order.status] }}
-                            </td>
+                                <td>
+                                    {{ statuses[order.status] }}
+                                </td>
                             {% else %}
                                 <td>
                                     {{ statuses[0] }}
@@ -72,9 +72,9 @@
                     </tbody>
                 </table>
             </div>
-            {#            <div class="navigation">#}
-            {#                {{ knp_pagination_render(pagination) }}#}
-            {#            </div>#}
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
         </div>
     </div>
 {% endblock %}
