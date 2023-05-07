@@ -8,38 +8,48 @@
     </a>
     <nav class="main-nav">
         <ul class="menu">
-            <li class="menu-item">
-                <a href="{{ path('main_category_show', {'slug': 'jeans'}) }}">
-                    <div>{{ 'label.menu_jeans'|trans }}</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ path('main_category_show', {'slug': 'hats'}) }}">
-                    <div>{{ 'label.menu_hats'|trans }}</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ path('main_category_show', {'slug': 'jackets'}) }}">
-                    <div>{{ 'label.menu_jackets'|trans }}</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ path('main_category_show', {'slug': 'dresses'}) }}">
-                    <div>{{ 'label.menu_dresses'|trans }}</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ path('main_category_show', {'slug': 'sneakers'}) }}">
-                    <div>{{ 'label.menu_sneakers'|trans }}</div>
-                </a>
-            </li>
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'jeans',
+                'label': 'label.menu_jeans'
+            } %}
 
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'hats',
+                'label': 'label.menu_hats'
+            } %}
 
-            <li class="menu-item font-weight-bold">
-                <a href="{{ path('main_login') }}">
-                    <div>{{ 'label.menu_login'|trans }}</div>
-                </a>
-            </li>
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'jackets',
+                'label': 'label.menu_jackets'
+            } %}
+
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'dresses',
+                'label': 'label.menu_dresses'
+            } %}
+
+            {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                'targetRoute': 'main_category_show',
+                'slug': 'sneakers',
+                'label': 'label.menu_sneakers'
+            } %}
+
+            {% if app.user %}
+                {% include 'main/_embed/_menu/_menu_item.html.twig' with {
+                    'targetRoute': 'main_profile_index',
+                    'label': 'label.menu_my_profile'
+                } %}
+            {% else %}
+                <li class="menu-item font-weight-bold">
+                    <a href="{{ path('main_login') }}">
+                        <div>{{ 'label.menu_login'|trans }}</div>
+                    </a>
+                </li>
+            {% endif %}
         </ul>
     </nav>
 

@@ -1,0 +1,29 @@
+{% if slug is not defined %}
+{% set slug = '' %}
+{% endif %}
+
+{% set isActiveItem = 0 %}
+{% set attr = app.request.attributes %}
+
+
+{% if ROUTE_NAME == 'main_category_show' %}
+    {% set isActiveItem = (attr.get('slug') == slug) %}
+{% elseif ROUTE_NAME == 'main_product_show' %}
+    {% set isActiveItem = (
+        attr.get('product') and
+        attr.get('product').categoty.slug == slug
+        ) %}
+{% endif %}
+
+{% if targetRoute == 'main_category_show' %}
+    {% set url = path('main_category_show', {'slug': slug}) %}
+{% else %}
+    {% set url = path(targetRoute) %}
+{% endif %}
+
+
+<li class="menu-item{% if isActiveItem %} active{% endif %}">
+    <a href="{{ url }}">
+        <div>{{ label|trans }}</div>
+    </a>
+</li>

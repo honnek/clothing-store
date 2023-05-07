@@ -390,5 +390,17 @@
         <target>Сбросить пароль</target>
       </segment>
     </unit>
+    <unit id="WHDJ6cJ" name="label.menu_my_profile">
+      <segment>
+        <source>label.menu_my_profile</source>
+        <target>Профиль</target>
+      </segment>
+    </unit>
+    <unit id="qjl0qQa" name="label.cart">
+      <segment>
+        <source>label.cart</source>
+        <target>Корзина</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
