@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="it" trgLang="it">
+  <file id="validators.it">
+    <unit id="YRKYC4." name="There is already an account with this email">
+      <notes>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Entity\User.php:0</note>
+      </notes>
+      <segment>
+        <source>There is already an account with this email</source>
+        <target>C'è già un account con questa email</target>
+      </segment>
+    </unit>
+    <unit id="TdLhlyP" name="The password fields must match.">
+      <notes>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:18</note>
+      </notes>
+      <segment>
+        <source>The password fields must match.</source>
+        <target>I campi password devono corrispondere.</target>
+      </segment>
+    </unit>
+    <unit id="YXZ26gK" name="Please enter a password">
+      <notes>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:29</note>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:66</note>
+      </notes>
+      <segment>
+        <source>Please enter a password</source>
+        <target>Inserisci una password</target>
+      </segment>
+    </unit>
+    <unit id=".esazsm" name="Your password should be at least {{ limit }} characters">
+      <notes>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:33</note>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:70</note>
+      </notes>
+      <segment>
+        <source>Your password should be at least {{ limit }} characters</source>
+        <target>La tua password dovrebbe essere almeno {{ limit }} carattere</target>
+      </segment>
+    </unit>
+    <unit id="uf3I_O7" name="Please fill the field">
+      <notes>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:32</note>
+      </notes>
+      <segment>
+        <source>Please fill the field</source>
+        <target>Si prega di compilare il campo</target>
+      </segment>
+    </unit>
+    <unit id="6Q8Inma" name="Not valid Email">
+      <notes>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:35</note>
+      </notes>
+      <segment>
+        <source>Not valid Email</source>
+        <target>Email non valida</target>
+      </segment>
+    </unit>
+    <unit id="Ys3QRDR" name="Please confirm policy">
+      <notes>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:52</note>
+      </notes>
+      <segment>
+        <source>Please confirm policy</source>
+        <target>Si prega di confermare la politica</target>
+      </segment>
+    </unit>
+    <unit id="Fe2zEyl" name="Please enter your email">
+      <notes>
+        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ResetPasswordRequestFormType.php:23</note>
+      </notes>
+      <segment>
+        <source>Please enter your email</source>
+        <target>Inserisci la tua email</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

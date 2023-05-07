@@ -47,13 +47,13 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $product = $productFormHandler->processEditForm($editProductModel, $form);
-            $this->addFlash('success', 'Изменения были сохранены');
+            $this->addFlash('success', 'The changes have been saved');
 
             return $this->redirectToRoute('admin_product_edit', ['id' => $product->getId()]);
         }
 
         if ($form->isSubmitted() && !$form->isValid()) {
-            $this->addFlash('warning', 'Что то пошло не так');
+            $this->addFlash('warning', 'Something went wrong');
         }
 
         return $this->render('admin/product/edit.html.twig', [
@@ -68,7 +68,7 @@ class ProductController extends AbstractController
     {
         $productManager->remove($product);
 
-        $this->addFlash('warning', 'Продукт ' . $product->getTitle() . ' удален!');
+        $this->addFlash('warning', 'Product  ' . $product->getTitle() . ' was deleted!');
 
         return $this->redirectToRoute('admin_product_list');
     }

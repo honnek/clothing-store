@@ -9,24 +9,24 @@
                 <div class="col-lg-12">
                     <div class="page-details page-login mt-4">
                         <h1 class="h3 mb-3 font-weight-normal title-gradient-1">
-                            Please Sign In
+                            {{ 'Please Sign In'|trans }}
                         </h1>
                         <form method="post" id="form">
 
                             <div class="form-group">
-                                <label for="inputEmail">Username or email address *</label>
+                                <label for="inputEmail">{{ "Username or email address *"|trans}}</label>
                                 <input type="email" value="{{ last_username }}" class="form-control" id="inputEmail" name="email" required autofocus>
                             </div>
 
                             <div class="form-group">
-                                <label for="inputPassword">Password *</label>
+                                <label for="inputPassword">{{ 'Password *'|trans }}</label>
                                 <input type="password" class="form-control" id="inputPassword" name="password" required>
                             </div>
 
                             <div class="form-group">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="rememberMe" name="_remember_me">
-                                    <label class="custom-control-label" for="rememberMe">Remember Me</label>
+                                    <label class="custom-control-label" for="rememberMe">{{ 'Remember Me'|trans }}</label>
                                 </div>
                             </div>
 
@@ -34,11 +34,11 @@
 
                             <div class="form-footer-buttons">
                                 <button type="submit" class="btn btn-success">
-                                    <span>LOG IN</span>
+                                    <span>{{ 'LOG IN'|trans }}</span>
                                 </button>
                                 <a href="{{ path('main_registration') }}" class="btn btn-link btn-dark">
                                     <i class="fas fa-user"></i>
-                                    <span>Create an account</span>
+                                    <span>{{ 'Create an account'|trans }}</span>
                                 </a>
                             </div>
 
@@ -46,7 +46,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 text-center">
                                         <a href=" {{ path('main_forgot_password_request') }} ">
-                                            Or reset your password
+                                            {{ 'Or reset your password'|trans }}
                                         </a>
                                     </div>
                                 </div>

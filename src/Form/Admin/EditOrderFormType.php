@@ -18,7 +18,7 @@ class EditOrderFormType extends AbstractType
     {
         $builder
             ->add('status', ChoiceType::class, [
-                'label' => 'Статус',
+                'label' => 'status',
                 'required' => true,
                 'choices' => array_flip(OrderStatus::getList()),
                 'attr' => [
@@ -26,14 +26,14 @@ class EditOrderFormType extends AbstractType
                 ]
             ])
             ->add('isDeleted', CheckboxType::class, [
-                'label' => 'Удален',
+                'label' => 'deleted',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-check-input',
                 ],
             ])
             ->add('owner', EntityType::class, [
-                'label' => 'Пользователь',
+                'label' => 'User',
                 'class' => User::class,
                 'required' => true,
                 'choice_label' => function(User $user) {

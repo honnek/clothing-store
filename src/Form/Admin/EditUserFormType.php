@@ -17,7 +17,7 @@ class EditUserFormType extends AbstractType
     {
         $builder
             ->add('newEmail', TextType::class, [
-                'label' => 'Новая почта',
+                'label' => 'New email',
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
@@ -25,7 +25,7 @@ class EditUserFormType extends AbstractType
                 ]
             ])
             ->add('plainPassword', TextType::class, [
-                'label' => 'Новый пароль',
+                'label' => 'New password',
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
@@ -33,7 +33,7 @@ class EditUserFormType extends AbstractType
                 ]
             ])
             ->add('roles', ChoiceType::class, [
-                'label' => 'Роли',
+                'label' => 'Roles',
                 'required' => false,
                 'choices' => Role::getList(),
                 'multiple' => true,
@@ -42,35 +42,35 @@ class EditUserFormType extends AbstractType
                 ]
             ])
             ->add('fullName', TextType::class, [
-                'label' => 'Полное имя',
+                'label' => 'Full Name',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-check-input',
                 ],
             ])
             ->add('phone', TextType::class, [
-                'label' => 'Номер телефона',
+                'label' => 'Number',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-check-input',
                 ],
             ])
             ->add('address', TextType::class, [
-                'label' => 'Адресс',
+                'label' => 'address',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-check-input',
                 ],
             ])
             ->add('zipcode', TextType::class, [
-                'label' => 'Почтовый индекс',
+                'label' => 'zipcode',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-check-input',
                 ],
             ])
             ->add('isDeleted', CheckboxType::class, [
-                'label' => 'Удален',
+                'label' => 'Deleted',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-check-input',

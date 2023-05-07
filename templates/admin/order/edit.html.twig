@@ -154,6 +154,7 @@
     window.staticStore.urlViewProduct = '{{ path('admin_product_edit_blank') }}'
     window.staticStore.urlApiCategory = '{{ path('_api_/categories{._format}_get_collection') }}'
     window.staticStore.urlApiProduct = '{{ path('_api_/products{._format}_get_collection') }}'
+    {# @TODO при ручном создании заказа в админке здесь выскакивает ошибка #}
     window.staticStore.urlApiOrder = '{{ path('_api_/orders/{id}{._format}_get', {'id': order.id}) }}'
     window.staticStore.urlApiOrderProduct = '{{ path('_api_/order_products{._format}_get_collection') }}'
     window.staticStore.urlApiOrderProductPost = '{{ path('_api_/order_products{._format}_post') }}'

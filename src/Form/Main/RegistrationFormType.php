@@ -25,7 +25,7 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'autofocus' => 'autofocus',
-                    'placeholder' => 'Введи сюда email',
+                    'placeholder' => 'Enter your email',
                 ],
                 'constraints' => [
                     new NotBlank([

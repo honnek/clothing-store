@@ -1,6 +1,7 @@
 <template>
     <div class="dropdown cart-dropdown">
-        <a href="/cart" class="cart-dropdown-btn-toggle">
+        <!-- @TODO en здесь костыль, вместо en должна быть переменная locale -->
+        <a href="/en/cart" class="cart-dropdown-btn-toggle">
             <i class="fas fa-shopping-cart"></i>
             <span class="count">{{ countCartProducts }}</span>
         </a>

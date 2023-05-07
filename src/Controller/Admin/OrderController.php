@@ -46,13 +46,13 @@ class OrderController extends AbstractController
 
             $order = $orderFormHandler->processEditForm($order);
 
-            $this->addFlash('success', 'Изменения были сохранены');
+            $this->addFlash('success', 'The changes have been saved');
 
             return $this->redirectToRoute('admin_order_edit', ['id' => $order->getId()]);
         }
 
         if ($form->isSubmitted() && !$form->isValid()) {
-            $this->addFlash('warning', 'Что то пошло не так');
+            $this->addFlash('warning', 'Something went wrong');
         }
 
         $orderProducts = [];
@@ -88,7 +88,7 @@ class OrderController extends AbstractController
     {
         $orderManager->remove($order);
 
-        $this->addFlash('warning', 'Заказ  ' . $order->getId() . ' удален!');
+        $this->addFlash('warning', 'Order ' . $order->getId() . ' was deleted!');
 
         return $this->redirectToRoute('admin_order_list');
     }

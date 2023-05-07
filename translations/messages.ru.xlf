@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en" trgLang="en">
-  <file id="messages.en">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="ru" trgLang="ru">
+  <file id="messages.ru">
     <unit id="o5SVfpi" name="label.menu_jeans">
       <segment>
         <source>label.menu_jeans</source>
-        <target>Jeans</target>
+        <target>Джинсы</target>
       </segment>
     </unit>
     <unit id="LJM3xkZ" name="label.menu_hats">
       <segment>
         <source>label.menu_hats</source>
-        <target>Hats</target>
+        <target>Шляпы</target>
+      </segment>
+    </unit>
+    <unit id="RUGo6Jw" name="label.menu_jackets">
+      <segment>
+        <source>label.menu_jackets</source>
+        <target>Куртки</target>
+      </segment>
+    </unit>
+    <unit id="VQW.NaT" name="label.menu_dresses">
+      <segment>
+        <source>label.menu_dresses</source>
+        <target>Платья</target>
+      </segment>
+    </unit>
+    <unit id="1c8tkml" name="label.menu_sneakers">
+      <segment>
+        <source>label.menu_sneakers</source>
+        <target>Кроссовки</target>
+      </segment>
+    </unit>
+    <unit id="R0aLfvL" name="label.menu_login">
+      <segment>
+        <source>label.menu_login</source>
+        <target>Вход</target>
       </segment>
     </unit>
     <unit id="sBaOftX" name="The changes have been saved">
@@ -22,7 +46,7 @@
       </notes>
       <segment>
         <source>The changes have been saved</source>
-        <target>The changes have been saved</target>
+        <target>Изменения были сохранены</target>
       </segment>
     </unit>
     <unit id="q4J_P_F" name="Something went wrong">
@@ -34,7 +58,7 @@
       </notes>
       <segment>
         <source>Something went wrong</source>
-        <target>Something went wrong</target>
+        <target>Что то пошло не так</target>
       </segment>
     </unit>
     <unit id="kQWnsB7" name="Your email address has been verified.">
@@ -43,7 +67,7 @@
       </notes>
       <segment>
         <source>Your email address has been verified.</source>
-        <target>Your email address has been verified.</target>
+        <target>Ваш адресс электронной почты был подтвержден</target>
       </segment>
     </unit>
     <unit id="9KqvQi7" name="Title (from class)">
@@ -53,7 +77,7 @@
       </notes>
       <segment>
         <source>Title (from class)</source>
-        <target>Title (from class)</target>
+        <target>Название</target>
       </segment>
     </unit>
     <unit id="BzwWNMS" name="status">
@@ -62,7 +86,7 @@
       </notes>
       <segment>
         <source>status</source>
-        <target>status</target>
+        <target>Статус</target>
       </segment>
     </unit>
     <unit id="EYXzfTO" name="deleted">
@@ -71,7 +95,7 @@
       </notes>
       <segment>
         <source>deleted</source>
-        <target>deleted</target>
+        <target>Удален</target>
       </segment>
     </unit>
     <unit id="tRLZfny" name="User">
@@ -80,7 +104,7 @@
       </notes>
       <segment>
         <source>User</source>
-        <target>User</target>
+        <target>Пользователь</target>
       </segment>
     </unit>
     <unit id="w97IUQs" name="Price (from class)">
@@ -89,7 +113,7 @@
       </notes>
       <segment>
         <source>Price (from class)</source>
-        <target>Price (from class)</target>
+        <target>Стоимость</target>
       </segment>
     </unit>
     <unit id="rO8sFbz" name="quality">
@@ -98,7 +122,7 @@
       </notes>
       <segment>
         <source>quality</source>
-        <target>quality</target>
+        <target>Количество</target>
       </segment>
     </unit>
     <unit id="yQRveje" name="description">
@@ -107,7 +131,7 @@
       </notes>
       <segment>
         <source>description</source>
-        <target>description</target>
+        <target>Описание</target>
       </segment>
     </unit>
     <unit id="7bLNO3T" name="category">
@@ -116,7 +140,7 @@
       </notes>
       <segment>
         <source>category</source>
-        <target>category</target>
+        <target>Категория</target>
       </segment>
     </unit>
     <unit id="wBnoRUg" name="Chose new image">
@@ -125,7 +149,7 @@
       </notes>
       <segment>
         <source>Chose new image</source>
-        <target>Chose new image</target>
+        <target>Выберите новое изображение</target>
       </segment>
     </unit>
     <unit id="WX.GxT8" name="Is published">
@@ -134,7 +158,7 @@
       </notes>
       <segment>
         <source>Is published</source>
-        <target>Is published</target>
+        <target>Подтверждено</target>
       </segment>
     </unit>
     <unit id="4Y.zskP" name="Is deleted">
@@ -143,7 +167,7 @@
       </notes>
       <segment>
         <source>Is deleted</source>
-        <target>Is deleted</target>
+        <target>Удалено</target>
       </segment>
     </unit>
     <unit id="DSXIsdt" name="New email">
@@ -152,7 +176,7 @@
       </notes>
       <segment>
         <source>New email</source>
-        <target>New email</target>
+        <target>Новый email</target>
       </segment>
     </unit>
     <unit id="PdnfREH" name="New password">
@@ -162,7 +186,7 @@
       </notes>
       <segment>
         <source>New password</source>
-        <target>New password</target>
+        <target>Новый пароль</target>
       </segment>
     </unit>
     <unit id="wlM3BVR" name="Roles">
@@ -171,7 +195,7 @@
       </notes>
       <segment>
         <source>Roles</source>
-        <target>Roles</target>
+        <target>Роли</target>
       </segment>
     </unit>
     <unit id="jgDN9x_" name="Full Name">
@@ -180,7 +204,7 @@
       </notes>
       <segment>
         <source>Full Name</source>
-        <target>Full Name</target>
+        <target>Полное имя</target>
       </segment>
     </unit>
     <unit id="vYLPFmm" name="Number">
@@ -189,7 +213,7 @@
       </notes>
       <segment>
         <source>Number</source>
-        <target>Number</target>
+        <target>Номер</target>
       </segment>
     </unit>
     <unit id="2Ayb_RD" name="address">
@@ -198,7 +222,7 @@
       </notes>
       <segment>
         <source>address</source>
-        <target>address</target>
+        <target>Адрес</target>
       </segment>
     </unit>
     <unit id="A9vuMpO" name="zipcode">
@@ -207,7 +231,7 @@
       </notes>
       <segment>
         <source>zipcode</source>
-        <target>zipcode</target>
+        <target>Почтовый индекс</target>
       </segment>
     </unit>
     <unit id="tI.znC4" name="Deleted">
@@ -216,7 +240,7 @@
       </notes>
       <segment>
         <source>Deleted</source>
-        <target>Deleted</target>
+        <target>Удален</target>
       </segment>
     </unit>
     <unit id="Hkmh4Tp" name="Repeat Password">
@@ -225,7 +249,7 @@
       </notes>
       <segment>
         <source>Repeat Password</source>
-        <target>Repeat Password</target>
+        <target>Повторите пароль</target>
       </segment>
     </unit>
     <unit id="RZQ0CeQ" name="Plain password">
@@ -234,7 +258,7 @@
       </notes>
       <segment>
         <source>Plain password</source>
-        <target>Plain password</target>
+        <target>Новый пароль</target>
       </segment>
     </unit>
     <unit id="s2JwFuf" name="Enter your full name">
@@ -243,7 +267,7 @@
       </notes>
       <segment>
         <source>Enter your full name</source>
-        <target>Enter your full name</target>
+        <target>Введите свое полное имя</target>
       </segment>
     </unit>
     <unit id="SaKuyOs" name="Enter your phone">
@@ -252,7 +276,7 @@
       </notes>
       <segment>
         <source>Enter your phone</source>
-        <target>Enter your phone</target>
+        <target>Введите свой номер</target>
       </segment>
     </unit>
     <unit id="BhddwJ0" name="Enter your address">
@@ -261,7 +285,7 @@
       </notes>
       <segment>
         <source>Enter your address</source>
-        <target>Enter your address</target>
+        <target>Введите свой адресс</target>
       </segment>
     </unit>
     <unit id="TXm0FaS" name="Enter your zipcode">
@@ -270,7 +294,7 @@
       </notes>
       <segment>
         <source>Enter your zipcode</source>
-        <target>Enter your zipcode</target>
+        <target>Введите свой почтовый индекс</target>
       </segment>
     </unit>
     <unit id="kZ34wmB" name="Please enter email">
@@ -279,7 +303,7 @@
       </notes>
       <segment>
         <source>Please enter email</source>
-        <target>Please enter email</target>
+        <target>Введите свою почту</target>
       </segment>
     </unit>
     <unit id="PlYICFm" name="I agree to the &lt;a href=&quot;#&quot;&gt; privacy policy &lt;/a&gt; *">
@@ -288,7 +312,7 @@
       </notes>
       <segment>
         <source>I agree to the &lt;a href="#"&gt; privacy policy &lt;/a&gt; *</source>
-        <target><![CDATA[I agree to the <a href="#"> privacy policy </a> *]]></target>
+        <target><![CDATA[Я согласен с <a href="#"> политикой конфиденциальности </a> *]]></target>
       </segment>
     </unit>
     <unit id="wGv5ZwF" name="Enter your password">
@@ -297,7 +321,7 @@
       </notes>
       <segment>
         <source>Enter your password</source>
-        <target>Enter your password</target>
+        <target>Введите свой пароль</target>
       </segment>
     </unit>
     <unit id="KDf2_hy" name="Enter your email">
@@ -306,7 +330,7 @@
       </notes>
       <segment>
         <source>Enter your email</source>
-        <target>Enter your email</target>
+        <target>Введите свою почту</target>
       </segment>
     </unit>
     <unit id="lpzL089" name="Email">
@@ -315,31 +339,55 @@
       </notes>
       <segment>
         <source>Email</source>
-        <target>Email</target>
+        <target>Почта</target>
       </segment>
     </unit>
-    <unit id="RUGo6Jw" name="label.menu_jackets">
+    <unit id="MZAKOYu" name="add to cart">
       <segment>
-        <source>label.menu_jackets</source>
-        <target>Jackets</target>
+        <source>add to cart</source>
+        <target>Добавить в корзину</target>
       </segment>
     </unit>
-    <unit id="VQW.NaT" name="label.menu_dresses">
+    <unit id="CridPqE" name="Please Sign In">
       <segment>
-        <source>label.menu_dresses</source>
-        <target>Dresses</target>
+        <source>Please Sign In</source>
+        <target>Авторизация</target>
       </segment>
     </unit>
-    <unit id="1c8tkml" name="label.menu_sneakers">
+    <unit id="KYD80mn" name="Username or email address *">
       <segment>
-        <source>label.menu_sneakers</source>
-        <target>Sneakers</target>
+        <source>Username or email address *</source>
+        <target>Имя пользователя или почта *</target>
       </segment>
     </unit>
-    <unit id="R0aLfvL" name="label.menu_login">
+    <unit id="fG3BGYQ" name="Password *">
       <segment>
-        <source>label.menu_login</source>
-        <target>Login</target>
+        <source>Password *</source>
+        <target>Пароль*</target>
+      </segment>
+    </unit>
+    <unit id="KpL2_.m" name="Remember Me">
+      <segment>
+        <source>Remember Me</source>
+        <target>Запомнить</target>
+      </segment>
+    </unit>
+    <unit id="dPRsyng" name="LOG IN">
+      <segment>
+        <source>LOG IN</source>
+        <target>Вход</target>
+      </segment>
+    </unit>
+    <unit id="hgM.daT" name="Create an account">
+      <segment>
+        <source>Create an account</source>
+        <target>Создать аккаунт</target>
+      </segment>
+    </unit>
+    <unit id="ln03tzK" name="Or reset your password">
+      <segment>
+        <source>Or reset your password</source>
+        <target>Сбросить пароль</target>
       </segment>
     </unit>
   </file>

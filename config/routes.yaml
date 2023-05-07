@@ -1,5 +1,17 @@
-controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+index:
+  path: /
+  defaults:
+    _controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    path: '/%locale%'
+    permanent: true
+
+
+#controllers:
+#    resource:
+#        path: ../src/Controller/
+#        namespace: App\Controller
+#    type: attribute
+#    defaults:
+#        _controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+#        path: '/%locale%'
+#        permanent: true
