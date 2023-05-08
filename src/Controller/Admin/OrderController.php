@@ -3,12 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
-use App\Entity\OrderProduct;
-use App\Entity\Product;
 use App\Entity\StaticStorage\OrderStatus;
 use App\Form\Admin\EditOrderFormType;
 use App\Form\Handler\OrderFormHandler;
-use App\Repository\OrderRepository;
 use App\Utils\Manager\OrderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     #[Route('/list', name: 'list')]
-    public function list(Request $request, OrderFormHandler $orderFormHandler, OrderRepository $orderRepository): Response
+    public function list(
+        Request          $request,
+        OrderFormHandler $orderFormHandler
+    ): Response
     {
         $filterForm = '';
         $pagination = $orderFormHandler->processOrderFiltersForm($request, $filterForm);
@@ -58,30 +58,9 @@ class OrderController extends AbstractController
             $this->addFlash('warning', 'Something went wrong');
         }
 
-        $orderProducts = [];
-        /** @var OrderProduct $product */
-        /** @TODO Удалить $orderProducts */
-//        foreach ($order->getOrderProducts()->getValues() as $product) {
-//            $orderProducts[] = [
-//                'id' => $product->getId(),
-//                'product' => [
-//                    'id' => $product->getProduct()->getId(),
-//                    'title' => $product->getProduct()->getTitle(),
-//                    'price' => $product->getProduct()->getPrice(),
-//                    'quantity' => $product->getProduct()->getQuality(),
-//                    'category' => [
-//                        'id' => $product->getProduct()->getCategory()->getId(),
-//                        'title' => $product->getProduct()->getCategory()->getTitle(),
-//                    ]
-//                ],
-//                'quantity' => $product->getProduct()->getQuality(),
-//                'pricePerOne' => $product->getPricePerOne(),
-//            ];
-//        }
-
         return $this->render('admin/order/edit.html.twig', [
             'order' => $order,
-            'orderProducts' => $orderProducts,
+            'orderProducts' => [],
             'form' => $form->createView(),
         ]);
     }
