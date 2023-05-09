@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Order;
 use App\Entity\StaticStorage\OrderStatus;
 use App\Form\Admin\EditOrderFormType;
+use App\Form\Admin\FilterType\OrderFilterForm;
+use App\Form\DTO\EditOrderModel;
 use App\Form\Handler\OrderFormHandler;
 use App\Utils\Manager\OrderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,12 +23,13 @@ class OrderController extends AbstractController
         OrderFormHandler $orderFormHandler
     ): Response
     {
-        $filterForm = '';
+        $filterForm = $this->createForm(OrderFilterForm::class, new EditOrderModel())->handleRequest($request);
         $pagination = $orderFormHandler->processOrderFiltersForm($request, $filterForm);
 
         return $this->render('admin/order/list.html.twig', [
             'pagination' => $pagination,
             'statuses' => OrderStatus::getList(),
+            'form' => $filterForm->createView()
         ]);
     }
 

@@ -3,6 +3,10 @@
 {% block title_detailed %}All Orders{% endblock %}
 
 {% block body %}
+    {% include 'admin/order/_table_filtration.html.twig' with {
+        'sectionTitle': 'Filters',
+        'form': form,
+    } %}
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             {% include 'admin/_embed/_card/_header_action.html.twig' with {

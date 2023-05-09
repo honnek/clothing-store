@@ -19,6 +19,7 @@
         "knpuniversity/oauth2-client-bundle": "^2.14",
         "league/oauth2-facebook": "^2.2",
         "league/oauth2-google": "^4.0",
+        "lexik/form-filter-bundle": "^7.0",
         "nelmio/cors-bundle": "^2.3",
         "php-translation/symfony-bundle": "^0.13.0",
         "phpdocumentor/reflection-docblock": "^5.3",
