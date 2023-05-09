@@ -63,6 +63,9 @@
             "./config/packages/knpu_oauth2_client.yaml"
         ]
     },
+    "lexik/form-filter-bundle": {
+        "version": "v7.0.3"
+    },
     "nelmio/cors-bundle": {
         "version": "2.3",
         "recipe": {
