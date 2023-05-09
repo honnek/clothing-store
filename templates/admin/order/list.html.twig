@@ -15,12 +15,12 @@
                 <table class="table table-bordered" id="main_table">
                     <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Created At</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Id', 'o.id') }}</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Created at', 'o.createdAt') }}</th>
                         <th>Count of products</th>
-                        <th>Total price</th>
-                        <th>User</th>
-                        <th>Status</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Total price', 'o.totalPrice') }}</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'User', 'u.id') }}</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Status', 'o.status') }}</th>
                     </tr>
                     </thead>
                     <tbody>

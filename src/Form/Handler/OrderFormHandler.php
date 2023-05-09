@@ -33,7 +33,12 @@ class OrderFormHandler
 
     public function processOrderFiltersForm(Request $request, string $filterForm)
     {
-        $orders = $this->orderManager->getRepository()->findBy(['isDeleted' => '0']);
+        $orders = $this->orderManager->getRepository()
+            ->createQueryBuilder('o')
+            ->leftJoin('o.owner', 'u')
+            ->where('o.isDeleted = :isDeleted')
+            ->setParameter('isDeleted', false)
+            ->getQuery();
 
         return $this->paginator->paginate($orders, $request->get('page', 1));
     }
