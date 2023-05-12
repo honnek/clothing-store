@@ -6,6 +6,7 @@ global.$ = global.jquery = $;
 require("jquery.easing")
 require("chart.js")
 
+require('./js/section/admin/theme/filters_feature')
 require('./js/section/admin/theme/sb-admin-2')
 
 
