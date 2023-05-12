@@ -52,7 +52,6 @@ class OrderFormHandler
             $this->filterBuilderUpdater->addFilterConditions($filterForm, $query);
         }
 
-
         return $this->paginator->paginate($query->getQuery(), $request->get('page', 1));
     }
 }

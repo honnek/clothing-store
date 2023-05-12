@@ -1,6 +1,6 @@
 <div class="cart shadow mb-4">
     <div class="card-header py-3">
-        Header
+        {% include 'admin/_embed/_filters/_header.html.twig' %}
     </div>
     <div class="card-body" id="order_list_filters_block">
         {{ form_start(form) }}
@@ -57,7 +57,7 @@
                 <tfoot>
                 <tr>
                     <td colspan="2">
-                        Actions
+                        {% include 'admin/_embed/_filters/_table_actions_btn.html.twig' %}
                     </td>
                 </tr>
                 </tfoot>
@@ -66,3 +66,21 @@
         {{ form_end(form) }}
     </div>
 </div>
+
+{% block javascripts %}
+{#    {{ parent() }}#}
+    <script>
+        const visibilityBtn = document.getElementById('order_list_filters_btn')
+        const visibilityBlock = document.getElementById('order_list_filters_block')
+        const filterSection = 'order-list'
+
+        document.addEventListener('DOMContentLoaded', () => {
+            visibilityBtn.addEventListener('click', () => {
+                toggleFiltersVisibility(filterSection)
+                changeFiltersBlockVisibility(filterSection, visibilityBlock)
+            })
+
+            changeFiltersBlockVisibility(filterSection, visibilityBlock)
+        })
+    </script>
+{% endblock %}
