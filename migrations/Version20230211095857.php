@@ -19,6 +19,7 @@ final class Version20230211095857 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        $this->addSql('CREATE EXTENSION "uuid-ossp"');
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE product ADD uuid UUID DEFAULT NULL');
         $this->addSql('COMMENT ON COLUMN product.uuid IS \'(DC2Type:uuid)\'');

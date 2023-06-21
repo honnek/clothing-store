@@ -12,12 +12,14 @@ services:
         restart: always
         depends_on:
             - php
+
+
     php:
         build:
           context: ./docker/php
           args:
-            - PUID=${PUID}
-            - PGID=${PGID}
+#            - PUID=${PUID}
+#            - PGID=${PGID}
             - INSTALL_XDEBUG=${INSTALL_XDEBUG}
         container_name: php
         restart: always
@@ -30,6 +32,8 @@ services:
             - postgres
         volumes:
             - .:/var/www
+
+
     postgres:
         build:
           context: ./docker/postgres
