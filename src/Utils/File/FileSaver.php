@@ -4,6 +4,7 @@
 namespace App\Utils\File;
 
 use App\Utils\Filesystem\FilesystemWorker;
+use http\Exception\RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -41,9 +42,10 @@ class FileSaver
         try {
             $uploadedFile->move($this->uploadsTempDir, $fileName);
         } catch (FileException $exception) {
-
-            // Не красиво, но пусть побудет так.
-            return null;
+            throw new RuntimeException('Не удается поместить загруженный файл: '.
+                $fileName .
+                $exception->getMessage()
+            );
         }
 
         return $fileName;
