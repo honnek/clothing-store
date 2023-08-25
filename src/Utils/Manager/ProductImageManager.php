@@ -42,7 +42,7 @@ class ProductImageManager extends AbstractBaseManager
      * @param string|null $tempImageFilename
      * @return ProductImage|null
      */
-    public function saveImageForProduct(string $productDir, string $tempImageFilename = null): ?ProductImage
+    public function resizeAndSaveImageForProduct(string $productDir, string $tempImageFilename = null): ?ProductImage
     {
         if (!$tempImageFilename) {
             return null;
@@ -97,13 +97,13 @@ class ProductImageManager extends AbstractBaseManager
 
     /**
      * @param ProductImage $productImage
-     * @param string $productImagesDir
+     * @param string $productDir
      * @return void
      */
-    public function remoeImageFromproduct(
+    public function removeImageFromProduct(
         ProductImage $productImage,
         string       $productDir,
-    )
+    ): void
     {
         $product = $productImage->getProduct();
 

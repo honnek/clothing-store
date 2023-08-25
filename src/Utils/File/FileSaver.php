@@ -42,7 +42,7 @@ class FileSaver
             $uploadedFile->move($this->uploadsTempDir, $fileName);
         } catch (FileException $exception) {
 
-            // Не очень красиво но пусть побудет так
+            // Не красиво, но пусть побудет так.
             return null;
         }
 

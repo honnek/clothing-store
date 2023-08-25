@@ -20,15 +20,14 @@ class ProductImageController extends AbstractController
         ProductImageManager $productImageManager,
     ): Response
     {
-        if (!$productImage) {
-
+        if (!$productImage->getId()) {
             return $this->redirectToRoute('admin_product_list');
         }
 
         $product = $productImage->getProduct();
         $productImagesDir = $productManager->getProductImagesDir($product);
 
-        $productImageManager->remoeImageFromproduct($productImage, $productImagesDir);
+        $productImageManager->removeImageFromProduct($productImage, $productImagesDir);
 
         return $this->redirectToRoute('admin_product_edit', [
             'id' => $product->getId(),
