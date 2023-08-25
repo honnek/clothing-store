@@ -25,7 +25,6 @@ use Symfony\Component\Form\FormInterface;
  */
 class ProductFormHandler
 {
-
     private ProductManager $productManager;
     private FileSaver $fileSaver;
 
@@ -57,7 +56,7 @@ class ProductFormHandler
         $product->setIsPublished($editProductModel->isPublished);
         $product->setIsDeleted($editProductModel->isDeleted);
 
-        /** сохранение изменений продукта */
+        /** Сохранение изменений продукта */
         $this->productManager->save($product);
 
         $newImageFile = $form->get('newImage')->getData();

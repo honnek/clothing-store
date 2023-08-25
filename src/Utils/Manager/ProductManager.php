@@ -49,20 +49,17 @@ class ProductManager extends AbstractBaseManager
      */
     public function getProductImagesDir(Product $product): string
     {
-
         return sprintf('%s/%s', $this->productImagesDir, $product->getId());
     }
 
     public function updateProductImages(Product $product, string $tempImageFilename = null): Product
     {
         if (!$tempImageFilename) {
-
             return $product;
         }
 
         $productDir = $this->getProductImagesDir($product);
-
-        $productImage = $this->productImageManager->saveImageForProduct($productDir, $tempImageFilename);
+        $productImage = $this->productImageManager->resizeAndSaveImageForProduct($productDir, $tempImageFilename);
         $productImage->setProduct($product);
         $product->addProductImage($productImage);
 
