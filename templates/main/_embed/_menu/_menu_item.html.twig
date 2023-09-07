@@ -11,7 +11,7 @@
 {% elseif ROUTE_NAME == 'main_product_show' %}
     {% set isActiveItem = (
         attr.get('product') and
-        attr.get('product').categoty.slug == slug
+        attr.get('product').category.slug == slug
         ) %}
 {% endif %}
 
