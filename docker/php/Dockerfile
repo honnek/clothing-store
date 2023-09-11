@@ -65,6 +65,11 @@ RUN apk add --no-cache \
       libpng-dev \
     && rm -rf /tmp/*
 
+# Setup ext-zip php extension
+RUN apk add --no-cache \
+      libzip-dev \
+      zip \
+    && docker-php-ext-install zip
 
 # Set user
 USER www-data
