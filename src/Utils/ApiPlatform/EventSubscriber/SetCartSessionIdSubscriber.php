@@ -30,6 +30,9 @@ class SetCartSessionIdSubscriber implements EventSubscriberInterface
         $cart->setSessionId($phpSessionId);
     }
 
+    /**
+     * @return array
+     */
     public static function getSubscribedEvents()
     {
         return [

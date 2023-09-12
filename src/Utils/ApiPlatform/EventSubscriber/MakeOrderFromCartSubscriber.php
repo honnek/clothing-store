@@ -30,6 +30,9 @@ class MakeOrderFromCartSubscriber implements EventSubscriberInterface
         $this->orderManager = $orderManager;
     }
 
+    /**
+     * @return array[]
+     */
     public static function getSubscribedEvents()
     {
         return [
