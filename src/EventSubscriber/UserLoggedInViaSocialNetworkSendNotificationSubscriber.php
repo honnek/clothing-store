@@ -23,6 +23,9 @@ class UserLoggedInViaSocialNetworkSendNotificationSubscriber implements EventSub
         $plainPassword = $event->getPlainPassword();
     }
 
+    /**
+     * @return string[]
+     */
     public static function getSubscribedEvents()
     {
         return [
