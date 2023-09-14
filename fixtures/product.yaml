@@ -1,0 +1,14 @@
+App\Entity\Product:
+  product_jeans_{1..5}:
+    title: <current()>
+    price: <randomFloat(2, 5.00, 100.00)>
+    quality: 5
+    category: '@category_jeans'
+    isPublished: 1
+
+  product_sneakers_{1..5}:
+    title: <current()>
+    price: <randomFloat(2, 5.00, 100.00)>
+    quality: 5
+    category: '@category_sneakers'
+    isPublished: 1

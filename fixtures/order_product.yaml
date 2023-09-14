@@ -1,0 +1,12 @@
+App\Entity\OrderProduct:
+  order_1_order_product_1:
+    appOrder: '@order_1'
+    product: '@product_sneakers_1'
+    quantity: 5
+    pricePerOne: 10
+
+  order_1_order_product_2:
+    appOrder: '@order_1'
+    product: '@product_jeans_1'
+    quantity: 2
+    pricePerOne: 15

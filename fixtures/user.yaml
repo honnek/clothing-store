@@ -1,0 +1,21 @@
+App\Entity\User:
+  user_1:
+    email: test_user_1@mail.com
+    #   Это пароль "user123" (и "\" перед "$")
+    password: '\$2y\$13\$FkWUJqnvCeBs39JPDLx7i.w0pOSj6qkYbRPP.xt05NClAL.2THaSi'
+    isVerified: 1
+    roles: "[ROLE_USER]"
+
+  user_admin_1:
+    email: admin_user_1@mail.com
+    #   Это пароль "admin123" (и "\" перед "$")
+    password: '\$2y\$13\$2n.m4OKFJEOy8zbRBE61/eyOojBKZeIU8/h46qy7IGXBB1rYrP/uG'
+    isVerified: 1
+    roles: "[ROLE_USER, ROLE_ADMIN]"
+
+  user_super_admin_1:
+    email: super_admin_user_1@mail.com
+    #   Это пароль "super123" (и "\" перед "$")
+    password: '\$2y\$13\$aSt3R/CnmNM03V6ywCnH.e9yE2caXV5JsUciGxEVavy43O.1PYCdS'
+    isVerified: 1
+    roles: "[ROLE_USER, ROLE_ADMIN, ROLE_SUPER_ADMIN]"
