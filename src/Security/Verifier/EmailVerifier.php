@@ -5,9 +5,11 @@ namespace App\Security\Verifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class EmailVerifier
@@ -19,15 +21,12 @@ class EmailVerifier
     ) {
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $email): void
     {
-        $signatureComponents = $this->verifyEmailHelper->generateSignature(
-            $verifyEmailRouteName,
-            $user->getId(),
-            $user->getEmail(),
-            ['id' => $user->getId()]
-        );
-
+        $signatureComponents = $this->generateEmailSignature($verifyEmailRouteName, $user);
         $context = $email->getContext();
 
         /** Заглушка на ошибку mailtrap, когда в отлов почты не падают письма */
@@ -45,13 +44,23 @@ class EmailVerifier
     /**
      * @throws VerifyEmailExceptionInterface
      */
-    public function handleEmailConfirmation(Request $request, UserInterface $user): void
+    public function handleEmailConfirmation(string $requestUri, UserInterface $user): void
     {
-        $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
+        $this->verifyEmailHelper->validateEmailConfirmation($requestUri, $user->getId(), $user->getEmail());
 
         $user->setIsVerified(true);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+    }
+
+    public function generateEmailSignature(string $verifyEmailRouteName, UserInterface $user): VerifyEmailSignatureComponents
+    {
+        return $this->verifyEmailHelper->generateSignature(
+            $verifyEmailRouteName,
+            $user->getId(),
+            $user->getEmail(),
+            ['id' => $user->getId()]
+        );
     }
 }
