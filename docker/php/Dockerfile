@@ -7,8 +7,13 @@ COPY ./conf/php.ini /usr/local/etc/php/php.ini
 RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf icu-dev bash
 
 # Postgres
-RUN apk add --no-cache libpq-dev \
-    && docker-php-ext-install pdo_pgsql
+#RUN apk add --no-cache libpq-dev \
+#    && docker-php-ext-install pdo_pgsql
+RUN set -ex \
+  && apk --no-cache add \
+    postgresql-dev
+
+RUN docker-php-ext-install pdo pdo_pgsql
 
 # Intl
 RUN docker-php-ext-configure intl \
