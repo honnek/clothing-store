@@ -59,6 +59,7 @@
         "twig/intl-extra": "^3.7"
     },
     "require-dev": {
+        "hautelook/alice-bundle": "^2.12",
         "phpunit/phpunit": "^9.0",
         "symfony/css-selector": "6.0.*",
         "symfony/maker-bundle": "^1.50",

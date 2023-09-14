@@ -1,0 +1,8 @@
+App\Entity\Category:
+  category_jeans:
+    title: jeans
+    slug: jeans
+
+  category_sneakers:
+    title: sneakers
+    slug: sneakers
