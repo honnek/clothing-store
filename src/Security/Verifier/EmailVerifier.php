@@ -29,8 +29,16 @@ class EmailVerifier
         $signatureComponents = $this->generateEmailSignature($verifyEmailRouteName, $user);
         $context = $email->getContext();
 
-        /** Заглушка на ошибку mailtrap, когда в отлов почты не падают письма */
-        file_put_contents( '../var/log/logMailTrap.txt', PHP_EOL . $signatureComponents->getSignedUrl() . PHP_EOL, FILE_APPEND);
+        /** Костыль. Актуально только для dev */
+        if (getenv('APP_ENV') === 'dev') {
+            /** Заглушка на ошибку mailtrap, когда в отлов почты не падают письма */
+            file_put_contents(
+                '../var/log/logMailTrap.txt',
+                PHP_EOL . $signatureComponents->getSignedUrl() . PHP_EOL,
+                FILE_APPEND
+            );
+        }
+
 
         $context['signedUrl'] = $signatureComponents->getSignedUrl();
         $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
