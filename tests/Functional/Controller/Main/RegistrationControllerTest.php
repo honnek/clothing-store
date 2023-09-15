@@ -7,6 +7,9 @@ use App\Repository\UserRepository;
 use App\Tests\TestUtils\Fixtures\UserFixtures;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * @group functional
+ */
 class RegistrationControllerTest extends WebTestCase
 {
     public function testEmailSendAndCreateUser(): void
