@@ -30,7 +30,8 @@ use ApiPlatform\Metadata\ApiFilter;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['product:list']]),
-        new Post(normalizationContext: ['groups' => ['product:list:write']], ),
+        /** @TODO с is_granted возможны ошибки */
+        new Post(normalizationContext: ['groups' => ['product:list:write']], security: "is_granted('ROLE_ADMIN')"),
         new Get(normalizationContext: ['groups' => ['product:item']]),
         new Patch(normalizationContext: ['groups' => ['product:item:write']], ),
     ],
