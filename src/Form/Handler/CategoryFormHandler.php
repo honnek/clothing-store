@@ -5,15 +5,18 @@ namespace App\Form\Handler;
 use App\Entity\Category;
 use App\Form\DTO\EditCategoryModel;
 use App\Utils\Manager\CategoryManager;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryFormHandler
 {
 
+    private SluggerInterface $slugger;
     private CategoryManager $categoryManager;
 
-    public function __construct(CategoryManager $categoryManager)
+    public function __construct(CategoryManager $categoryManager, SluggerInterface $slugger)
     {
         $this->categoryManager = $categoryManager;
+        $this->slugger = $slugger;
     }
 
     /**
@@ -29,6 +32,7 @@ class CategoryFormHandler
         }
 
         $category->setTitle($editCategoryModel->title);
+        $category->setSlug(strtolower($this->slugger->slug($editCategoryModel->title)));
         $this->categoryManager->save($category);
 
         return $category;
