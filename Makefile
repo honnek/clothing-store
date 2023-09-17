@@ -1,8 +1,11 @@
 up:
-	docker-compose up -d
+	docker-compose up
 
 down:
 	docker-compose down
+
+clear:
+	docker system prune --all --volumes --force
 
 build:
 	docker-compose down -v --remove-orphans
