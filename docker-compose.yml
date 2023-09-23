@@ -50,5 +50,25 @@ services:
           # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
           # - ./docker/db/data:/var/lib/postgresql/data:rw
 
+#    chrome:
+#        image: selenium/node-chrome:beta
+#        shm_size: 2gb
+#        depends_on:
+#            - selenium-hub
+#        environment:
+#            - SE_EVENT_BUS_HOST=selenium-hub
+#            - SE_EVENT_BUS_PUBLISH_PORT=4442
+#            - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+#
+#    selenium-hub:
+#        image: selenium/hub:latest
+#        container_name: selenium-hub
+#        volumes:
+#            - ./project/tests/Selenium:/tests
+#        ports:
+#            - "4442:4442"
+#            - "4443:4443"
+#            - "4444:4444"
+
 volumes:
   db_data:
