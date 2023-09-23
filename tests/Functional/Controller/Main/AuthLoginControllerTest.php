@@ -29,6 +29,23 @@ class AuthLoginControllerTest extends PantherTestCase
 
         $this->assertResponseIsSuccessful();
     }
+
+    public function testLoginWithPantherClient(): void
+    {
+        $client = self::createPantherClient(['browser' => self::CHROME]);
+
+        $client->request('GET', '/en/login');
+        $client->submitForm('LOG IN', [
+            'email' => UserFixtures::USER_1_EMAIL,
+            'password' => UserFixtures::USER_1_PASSWORD,
+        ]);
+
+        $this->assertSame(self::$baseUri . '/en/profile', $client->getCurrentURL());
+
+        $this->assertPageTitleContains('My profile - RankedChoice');
+        $this->assertSelectorTextContains('#page_header_title', 'Welcome, to your profile!');
+    }
+
 //    public function testLoginWithSeleniumClient(): void
 //    {
 //        self::createPantherClient();
@@ -50,20 +67,4 @@ class AuthLoginControllerTest extends PantherTestCase
 //
 //        $this->assertSame($crawler->filter('#page_header_title')->text(), 'Welcome, to your profile!');
 //    }
-
-    public function testLoginWithPantherClient(): void
-    {
-        $client = self::createPantherClient(['browser' => self::CHROME]);
-
-        $client->request('GET', '/en/login');
-        $client->submitForm('LOG IN', [
-            'email' => UserFixtures::USER_1_EMAIL,
-            'password' => UserFixtures::USER_1_PASSWORD,
-        ]);
-
-        $this->assertSame(self::$baseUri . '/en/profile', $client->getCurrentURL());
-
-        $this->assertPageTitleContains('My profile - RankedChoice');
-        $this->assertSelectorTextContains('#page_header_title', 'Welcome, to your profile!');
-    }
 }
