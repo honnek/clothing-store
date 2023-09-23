@@ -65,6 +65,7 @@
         "dbrekelmans/bdi": "^1.0",
         "friendsofphp/php-cs-fixer": "^3.28",
         "hautelook/alice-bundle": "^2.12",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.0",
         "symfony/css-selector": "6.0.*",
         "symfony/maker-bundle": "^1.50",
