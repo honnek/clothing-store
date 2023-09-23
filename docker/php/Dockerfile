@@ -76,6 +76,15 @@ RUN apk add --no-cache \
       zip \
     && docker-php-ext-install zip
 
+# Setup chromium and panther
+RUN apk add --no-cache \
+        chromium \
+        chromium-chromedriver
+ENV PANTHER_CHROME_DRIVER_BINARY /usr/lib/chromium/chromedriver
+ENV PANTHER_NO_SANDBOX 1
+ENV PANTHER_WEB_SERVER_PORT 9800
+
+
 # Set user
 USER www-data
 
