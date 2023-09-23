@@ -63,6 +63,7 @@
         "behat/behat": "^3.13",
         "dama/doctrine-test-bundle": "^7.2",
         "dbrekelmans/bdi": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.28",
         "hautelook/alice-bundle": "^2.12",
         "phpunit/phpunit": "^9.0",
         "symfony/css-selector": "6.0.*",
