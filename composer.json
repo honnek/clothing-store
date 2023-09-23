@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "2.10.2",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
+        "fabpot/goutte": "^4.0",
         "knplabs/knp-paginator-bundle": "^6.2",
         "knpuniversity/oauth2-client-bundle": "^2.15",
         "lexik/form-filter-bundle": "^8.0",
@@ -59,7 +60,9 @@
         "twig/intl-extra": "^3.7"
     },
     "require-dev": {
+        "behat/behat": "^3.13",
         "dama/doctrine-test-bundle": "^7.2",
+        "dbrekelmans/bdi": "^1.0",
         "hautelook/alice-bundle": "^2.12",
         "phpunit/phpunit": "^9.0",
         "symfony/css-selector": "6.0.*",
