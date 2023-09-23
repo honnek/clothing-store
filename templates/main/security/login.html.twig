@@ -33,7 +33,7 @@
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                             <div class="form-footer-buttons">
-                                <button type="submit" class="btn btn-success">
+                                <button name="LOGIN" id="LOGIN" type="submit" class="btn btn-success">
                                     <span>{{ 'LOG IN'|trans }}</span>
                                 </button>
                                 <a href="{{ path('main_registration') }}" class="btn btn-link btn-dark">
