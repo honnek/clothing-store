@@ -1,3 +1,6 @@
+##
+## DOCKER
+## -----------
 up:
 	docker-compose up
 
@@ -12,8 +15,32 @@ build:
 	docker-compose rm -vsf
 	docker-compose up -d --build
 
+
+##
+## UTILS
+## -----------
+psql-connect:
+	docker-compose exec postgres psql -U postgres ranked_choice_2
+
+
+
+##
+## TESTING
+## -----------
 test:
-	docker-compose exec php vendor/bin/phpunit ./tests
+	docker-compose exec php sh ./bin/run-tests.sh
+
+
+##
+## REFACTORING
+## -----------
+fixer:
+	docker-compose exec php vendor/bin/php-cs-fixer fix src --verbose
+
+phpstan:
+	docker-compose exec php vendor/bin/phpstan analyse src/
+
+
 
 bash:
 	docker-compose exec -u www-data php bash
