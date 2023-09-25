@@ -50,6 +50,19 @@ services:
           # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
           # - ./docker/db/data:/var/lib/postgresql/data:rw
 
+
+    jenkins:
+        build:
+            context: ./docker/jenkins
+        container_name: jenkins
+        ports:
+            - ${JENKINS_HOST_PORT}:${JENKINS_CONTAINER_PORT}
+            - "5000:5000"
+        restart: always
+
+
+#-------------------------selenium-------------------------------
+
 #    chrome:
 #        image: selenium/node-chrome:beta
 #        shm_size: 2gb
