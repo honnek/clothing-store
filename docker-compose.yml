@@ -1,78 +1,96 @@
 version: '3.8'
 services:
-    nginx:
-        build:
-          context: ./docker/nginx
-        container_name: nginx
-        volumes:
-            - .:/var/www:rw
-            - ./logs/nginx:/var/log/nginx/:rw
-        ports:
-            - "8000:8000"
-        restart: always
-        depends_on:
-            - php
+#  nginx:
+#    build:
+#      context: ./docker/nginx
+#    container_name: nginx
+#    volumes:
+#      - .:/var/www:rw
+#      - ./logs/nginx:/var/log/nginx/:rw
+#    ports:
+#      - "8000:8000"
+#    restart: always
+#    depends_on:
+#      - php
+#
+#
+#  php:
+#    build:
+#      context: ./docker/php
+#      args:
+#        #            - PUID=${PUID}
+#        #            - PGID=${PGID}
+#        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+#    container_name: php
+#    restart: always
+#    environment:
+#      - POSTGRES_HOST=${POSTGRES_HOST}
+#      - POSTGRES_DB=${POSTGRES_DB}
+#      - POSTGRES_USER=${POSTGRES_USER}
+#      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+#    depends_on:
+#      - postgres
+#    volumes:
+#      - .:/var/www
+#
+#
+#  postgres:
+#    build:
+#      context: ./docker/postgres
+#    container_name: postgres
+#    restart: always
+#    environment:
+#      - POSTGRES_DB=${POSTGRES_DB}
+#      - POSTGRES_USER=${POSTGRES_USER}
+#      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+#    ports:
+#      - ${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}
+#    volumes:
+#      - db_data:/var/lib/postgresql/data:rw
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/db/data:/var/lib/postgresql/data:rw
 
 
-    php:
-        build:
-          context: ./docker/php
-          args:
-#            - PUID=${PUID}
-#            - PGID=${PGID}
-            - INSTALL_XDEBUG=${INSTALL_XDEBUG}
-        container_name: php
-        restart: always
-        environment:
-            - POSTGRES_HOST=${POSTGRES_HOST}
-            - POSTGRES_DB=${POSTGRES_DB}
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-        depends_on:
-            - postgres
-        volumes:
-            - .:/var/www
+  #    jenkins:
+  #        build:
+  #            context: ./docker/jenkins
+  #        container_name: jenkins
+  #        ports:
+  #            - ${JENKINS_HOST_PORT}:${JENKINS_CONTAINER_PORT}
+  #            - "5000:5000"
+  #        restart: always
 
+  jenkins:
+    build:
+      context: ./docker/jenkins
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "5000:5000"
+    environment:
+#      DOCKER_HOST: tcp://docker_for_jenkins:2379
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: 1
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - docker_certs:/certs/client:ro
+#    depends_on:
+#      - docker_for_jenkins
 
-    postgres:
-        build:
-          context: ./docker/postgres
-        container_name: postgres
-        restart: always
-        environment:
-            - POSTGRES_DB=${POSTGRES_DB}
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-        ports:
-            - ${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}
-        volumes:
-            - db_data:/var/lib/postgresql/data:rw
-          # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-          # - ./docker/db/data:/var/lib/postgresql/data:rw
-
-
-#    jenkins:
-#        build:
-#            context: ./docker/jenkins
-#        container_name: jenkins
-#        ports:
-#            - ${JENKINS_HOST_PORT}:${JENKINS_CONTAINER_PORT}
-#            - "5000:5000"
-#        restart: always
-
-    jenkins:
-        image: jenkins/jenkins:lts
-        ports:
-            - "8080:8080"
-        volumes:
-            - jenkins_home:/var/jenkins_home
-    ssh-agent:
-        image: jenkins/ssh-agent
+#  docker_for_jenkins:
+#    image: docker:dind
+#    container_name: docker_for_jenkins
+#    privileged: true
+#    environment:
+#      DOCKER_TLS_CERTDIR: /certs
+#    volumes:
+#      - jenkins_home:/var/jenkins_home
+#      - docker_certs:/certs/client
+#      - docker_data:/var/lib/docker
 
 
 
 #-------------------------selenium-------------------------------
-
 #    chrome:
 #        image: selenium/node-chrome:beta
 #        shm_size: 2gb
@@ -94,5 +112,7 @@ services:
 #            - "4444:4444"
 
 volumes:
-  db_data:
+#  db_data:
   jenkins_home:
+  docker_certs:
+  docker_data:
