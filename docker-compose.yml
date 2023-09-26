@@ -73,7 +73,9 @@ services:
       DOCKER_TLS_VERIFY: 1
     volumes:
       - jenkins_home:/var/jenkins_home
-      - docker_certs:/certs/client:ro
+      - /tmp/ca.pem:/certs/client/ca.pem
+      - /tmp/cert.pem:/certs/client/cert.pem
+      - /tmp/key.pem:/certs/client/key.pem
     depends_on:
       - docker_for_jenkins
 
