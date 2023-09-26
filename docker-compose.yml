@@ -68,25 +68,25 @@ services:
       - "8080:8080"
       - "5000:5000"
     environment:
-#      DOCKER_HOST: tcp://docker_for_jenkins:2379
+      DOCKER_HOST: tcp://docker_for_jenkins:2376
       DOCKER_CERT_PATH: /certs/client
       DOCKER_TLS_VERIFY: 1
     volumes:
       - jenkins_home:/var/jenkins_home
       - docker_certs:/certs/client:ro
-#    depends_on:
-#      - docker_for_jenkins
+    depends_on:
+      - docker_for_jenkins
 
-#  docker_for_jenkins:
-#    image: docker:dind
-#    container_name: docker_for_jenkins
-#    privileged: true
-#    environment:
-#      DOCKER_TLS_CERTDIR: /certs
-#    volumes:
-#      - jenkins_home:/var/jenkins_home
-#      - docker_certs:/certs/client
-#      - docker_data:/var/lib/docker
+  docker_for_jenkins:
+    image: docker:dind
+    container_name: docker_for_jenkins
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - docker_certs:/certs/client
+      - docker_data:/var/lib/docker
 
 
 
