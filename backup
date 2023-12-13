@@ -1,0 +1,906 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.0 (Debian 16.0-1.pgdg120+1)
+-- Dumped by pg_dump version 16.0 (Debian 16.0-1.pgdg120+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+--
+-- Name: notify_messenger_messages(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.notify_messenger_messages() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+            BEGIN
+                PERFORM pg_notify('messenger_messages', NEW.queue_name::text);
+                RETURN NEW;
+            END;
+        $$;
+
+
+ALTER FUNCTION public.notify_messenger_messages() OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: cart; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cart (
+    id integer NOT NULL,
+    session_id character varying(255) NOT NULL,
+    created_at timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.cart OWNER TO postgres;
+
+--
+-- Name: cart_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cart_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.cart_id_seq OWNER TO postgres;
+
+--
+-- Name: cart_product; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cart_product (
+    id integer NOT NULL,
+    cart_id integer NOT NULL,
+    product_id integer NOT NULL,
+    quantity integer NOT NULL
+);
+
+
+ALTER TABLE public.cart_product OWNER TO postgres;
+
+--
+-- Name: cart_product_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cart_product_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.cart_product_id_seq OWNER TO postgres;
+
+--
+-- Name: category; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.category (
+    id integer NOT NULL,
+    title character varying(100) NOT NULL,
+    slug character varying(120) NOT NULL,
+    is_deleted boolean
+);
+
+
+ALTER TABLE public.category OWNER TO postgres;
+
+--
+-- Name: category_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.category_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.category_id_seq OWNER TO postgres;
+
+--
+-- Name: doctrine_migration_versions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctrine_migration_versions (
+    version character varying(191) NOT NULL,
+    executed_at timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
+    execution_time integer
+);
+
+
+ALTER TABLE public.doctrine_migration_versions OWNER TO postgres;
+
+--
+-- Name: order; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."order" (
+    id integer NOT NULL,
+    owner_id integer,
+    created_at timestamp(0) without time zone NOT NULL,
+    status integer NOT NULL,
+    total_price double precision,
+    updated_at timestamp(0) without time zone NOT NULL,
+    is_deleted boolean NOT NULL
+);
+
+
+ALTER TABLE public."order" OWNER TO postgres;
+
+--
+-- Name: order_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.order_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.order_id_seq OWNER TO postgres;
+
+--
+-- Name: order_product; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.order_product (
+    id integer NOT NULL,
+    app_order_id integer NOT NULL,
+    product_id integer NOT NULL,
+    quantity integer NOT NULL,
+    price_per_one numeric(6,2) NOT NULL
+);
+
+
+ALTER TABLE public.order_product OWNER TO postgres;
+
+--
+-- Name: order_product_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.order_product_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.order_product_id_seq OWNER TO postgres;
+
+--
+-- Name: product; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product (
+    id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    price numeric(6,2) NOT NULL,
+    quality integer NOT NULL,
+    created_at timestamp(0) without time zone NOT NULL,
+    description text,
+    is_published boolean NOT NULL,
+    is_deleted boolean NOT NULL,
+    slug character varying(128) DEFAULT NULL::character varying,
+    uuid uuid NOT NULL,
+    category_id integer
+);
+
+
+ALTER TABLE public.product OWNER TO postgres;
+
+--
+-- Name: COLUMN product.uuid; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.product.uuid IS '(DC2Type:uuid)';
+
+
+--
+-- Name: product_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.product_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.product_id_seq OWNER TO postgres;
+
+--
+-- Name: product_image; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_image (
+    id integer NOT NULL,
+    product_id integer NOT NULL,
+    filename_big character varying(255) NOT NULL,
+    filename_middle character varying(255) NOT NULL,
+    filename_small character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.product_image OWNER TO postgres;
+
+--
+-- Name: product_image_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.product_image_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.product_image_id_seq OWNER TO postgres;
+
+--
+-- Name: reset_password_request; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.reset_password_request (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    selector character varying(20) NOT NULL,
+    hashed_token character varying(100) NOT NULL,
+    requested_at timestamp(0) without time zone NOT NULL,
+    expires_at timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.reset_password_request OWNER TO postgres;
+
+--
+-- Name: COLUMN reset_password_request.requested_at; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.reset_password_request.requested_at IS '(DC2Type:datetime_immutable)';
+
+
+--
+-- Name: COLUMN reset_password_request.expires_at; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.reset_password_request.expires_at IS '(DC2Type:datetime_immutable)';
+
+
+--
+-- Name: reset_password_request_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.reset_password_request_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.reset_password_request_id_seq OWNER TO postgres;
+
+--
+-- Name: test_api_entity; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.test_api_entity (
+    id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    description character varying(255) NOT NULL,
+    is_deleted boolean NOT NULL
+);
+
+
+ALTER TABLE public.test_api_entity OWNER TO postgres;
+
+--
+-- Name: test_api_entity_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.test_api_entity_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.test_api_entity_id_seq OWNER TO postgres;
+
+--
+-- Name: test_table; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.test_table (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.test_table OWNER TO postgres;
+
+--
+-- Name: test_table_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.test_table_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.test_table_id_seq OWNER TO postgres;
+
+--
+-- Name: test_table_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.test_table_id_seq OWNED BY public.test_table.id;
+
+
+--
+-- Name: user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."user" (
+    id integer NOT NULL,
+    email character varying(180) NOT NULL,
+    roles json NOT NULL,
+    password character varying(255) NOT NULL,
+    is_verified boolean NOT NULL,
+    full_name character varying(255) DEFAULT NULL::character varying,
+    phone character varying(30) DEFAULT NULL::character varying,
+    address character varying(255) DEFAULT NULL::character varying,
+    zipcode integer,
+    is_deleted boolean NOT NULL,
+    facebook_id character varying(25) DEFAULT NULL::character varying,
+    google_id character varying(25) DEFAULT NULL::character varying
+);
+
+
+ALTER TABLE public."user" OWNER TO postgres;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.user_id_seq OWNER TO postgres;
+
+--
+-- Name: test_table id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.test_table ALTER COLUMN id SET DEFAULT nextval('public.test_table_id_seq'::regclass);
+
+
+--
+-- Data for Name: cart; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cart (id, session_id, created_at) FROM stdin;
+2	f1d58b99a63cab98811ce943c7f4a0f5	2023-09-17 09:50:34
+3	9a23439d07c7c612dae351deedc50c39	2023-09-17 12:50:05
+5	7737fe0f2478d85e5da9a1ebd7cde14c	2023-09-17 13:18:58
+6	65a1a0cdf04cfe0fdd108f5c39c73714	2023-09-17 13:33:55
+7	78a4bd763b5544f43c2bac136a115b40	2023-09-17 13:38:21
+8	5f3f27848074b6f1ee936c410e4fb02d	2023-09-17 16:45:47
+9	0350440d72600ae4dabfc971c9ca1cdd	2023-09-18 20:11:07
+11	8835d8be1f0df103994d99bbd459adf5	2023-09-19 11:21:53
+12	959a87ee56ee9ca935edd09c0b6b2c4a	2023-09-19 14:51:30
+13	cbeb5b6a6af1908a92b8b39f4ec4409c	2023-09-19 16:56:48
+14	969ef2701591b9bf92905f0e00f744d5	2023-09-19 21:49:31
+15	c7576d3be226c703fbf4fcbd383f6f11	2023-09-19 22:51:03
+16	45e231b1cb3f44ac3095416c4f5e2eaa	2023-09-19 23:57:08
+18	2e1b6e20326c57ba7996ad1eaef7f672	2023-09-20 19:05:21
+19	59be32ef37e6b58cfb3d33d0c730765b	2023-09-23 14:30:09
+21	6dc7e6e8aa998d4a5dc8830974c0a7ed	2023-09-24 21:50:02
+22	ec525dc26a10f85ee441f6e7dd318fad	2023-09-25 09:21:58
+23	f3fe29cd3444f5f5f94f11002acb12c9	2023-09-25 13:51:49
+24	53a68bf4bb6f2c95ccc2e63ff554d23b	2023-09-25 13:54:14
+26	27970b1d1bd0aa078d8e91588d2969b1	2023-09-25 13:55:48
+27	ad042ac73e75b4078e619f80e1f1d242	2023-09-25 14:18:50
+28	eddbe24d3b302e0761d148cb25975a44	2023-09-25 14:18:55
+29	c1e18b5837308d8b1fcb21261199c0b6	2023-09-26 14:44:52
+31	454fd8997c7cf204b958fdbb1def9b1e	2023-09-27 00:34:47
+40	23297eb5204b541a9c7c4d23bc076486	2023-11-28 10:33:48
+41	77fba7924009dfef70d1cea0f37731ec	2023-11-28 10:33:50
+42	b50bd67da6567055e33469e0c0d8beea	2023-11-28 11:28:33
+43	7564497df268a1ffe6c0b24dd8746733	2023-11-28 11:28:42
+\.
+
+
+--
+-- Data for Name: cart_product; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cart_product (id, cart_id, product_id, quantity) FROM stdin;
+\.
+
+
+--
+-- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.category (id, title, slug, is_deleted) FROM stdin;
+4	Dresses	dresses	f
+5	Hats	hats	f
+6	Sneakers	sneakers	f
+\.
+
+
+--
+-- Data for Name: doctrine_migration_versions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
+DoctrineMigrations\\Version20230130213839	2023-09-17 09:49:15	5
+DoctrineMigrations\\Version20230131150414	2023-09-17 09:49:15	11
+DoctrineMigrations\\Version20230201161405	2023-09-17 09:49:15	4
+DoctrineMigrations\\Version20230201163957	2023-09-17 09:49:15	0
+DoctrineMigrations\\Version20230202211121	2023-09-17 09:49:15	1
+DoctrineMigrations\\Version20230202211259	2023-09-17 09:49:15	1
+DoctrineMigrations\\Version20230202212046	2023-09-17 09:49:15	0
+DoctrineMigrations\\Version20230206222524	2023-09-17 09:49:15	5
+DoctrineMigrations\\Version20230208123126	2023-09-17 09:49:15	0
+DoctrineMigrations\\Version20230211095857	2023-09-17 09:49:15	5
+DoctrineMigrations\\Version20230211101216	2023-09-17 09:49:15	0
+DoctrineMigrations\\Version20230222111337	2023-09-17 09:49:15	5
+DoctrineMigrations\\Version20230223111637	2023-09-17 09:49:15	0
+DoctrineMigrations\\Version20230225204806	2023-09-17 09:49:15	7
+DoctrineMigrations\\Version20230226124537	2023-09-17 09:49:15	9
+DoctrineMigrations\\Version20230411203448	2023-09-17 09:49:15	4
+DoctrineMigrations\\Version20230418201200	2023-09-17 09:49:15	0
+DoctrineMigrations\\Version20230420220529	2023-09-17 09:49:15	0
+DoctrineMigrations\\Version20230910203715	2023-09-17 09:49:15	5
+\.
+
+
+--
+-- Data for Name: order; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."order" (id, owner_id, created_at, status, total_price, updated_at, is_deleted) FROM stdin;
+1	1	2023-09-17 13:18:54	0	10000	2023-09-17 13:20:18	f
+2	1	2023-09-25 13:54:31	0	5000	2023-09-25 13:54:31	f
+3	1	2023-09-27 00:34:53	0	1500	2023-09-27 00:34:53	f
+\.
+
+
+--
+-- Data for Name: order_product; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.order_product (id, app_order_id, product_id, quantity, price_per_one) FROM stdin;
+1	1	4	1	5000.00
+2	1	2	2	1500.00
+3	1	3	1	2000.00
+4	2	4	1	5000.00
+5	2	5	12	2.00
+6	3	2	1	1500.00
+\.
+
+
+--
+-- Data for Name: product; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product (id, title, price, quality, created_at, description, is_published, is_deleted, slug, uuid, category_id) FROM stdin;
+3	Хей, друг	600.00	23	2023-09-17 13:17:56	qweqwe	t	f	\N	54d8c97e-cf9c-4028-98a6-0d1c86d761a7	5
+4	Hey girl	5000.00	4	2023-09-17 13:18:28	Priveeeyt	t	f	\N	cddafb54-d5a8-4287-8611-f487c515430d	4
+5	Product6	1245.00	23	2023-09-25 13:55:36	Hey maaan	t	f	\N	7798144f-acd6-404d-a408-2d2e47784448	4
+2	Whore	1500.00	5	2023-09-17 13:17:35	e,kkkkrpokwer	t	f	\N	8eb4dc54-d128-4abe-9d05-d35db43be8c8	6
+\.
+
+
+--
+-- Data for Name: product_image; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.product_image (id, product_id, filename_big, filename_middle, filename_small) FROM stdin;
+2	2	6506d23f74d5d_big.jpg	6506d23f71fd1_middle.jpg	6506d23f6f91b_small.jpg
+3	3	6506d25473da3_big.jpg	6506d25471e6a_middle.jpg	6506d2547069b_small.jpg
+4	4	6506d274185e3_big.jpg	6506d274131bf_middle.jpg	6506d2741042b_small.jpg
+5	5	6511672847de8_big.jpg	6511672835961_middle.jpg	6511672826150_small.jpg
+\.
+
+
+--
+-- Data for Name: reset_password_request; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.reset_password_request (id, user_id, selector, hashed_token, requested_at, expires_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: test_api_entity; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.test_api_entity (id, title, description, is_deleted) FROM stdin;
+\.
+
+
+--
+-- Data for Name: test_table; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.test_table (id, name) FROM stdin;
+1	Test 1
+2	Test 2
+3	Test 3
+\.
+
+
+--
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."user" (id, email, roles, password, is_verified, full_name, phone, address, zipcode, is_deleted, facebook_id, google_id) FROM stdin;
+1	heyBroDude@dude.com	["ROLE_ADMIN"]	$2y$13$x0ucM2C7VxQzKd7uHYMm..QadJBi.GXasxgqIs.5moSiVaco.BKqy	t	Дмитрий Андреевич Махинов	+79002776758	ул. Лунная, д.5 кв.1	350906	f	\N	\N
+\.
+
+
+--
+-- Name: cart_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cart_id_seq', 46, true);
+
+
+--
+-- Name: cart_product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cart_product_id_seq', 4, true);
+
+
+--
+-- Name: category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.category_id_seq', 7, true);
+
+
+--
+-- Name: order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.order_id_seq', 3, true);
+
+
+--
+-- Name: order_product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.order_product_id_seq', 6, true);
+
+
+--
+-- Name: product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.product_id_seq', 5, true);
+
+
+--
+-- Name: product_image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.product_image_id_seq', 5, true);
+
+
+--
+-- Name: reset_password_request_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.reset_password_request_id_seq', 1, false);
+
+
+--
+-- Name: test_api_entity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.test_api_entity_id_seq', 1, false);
+
+
+--
+-- Name: test_table_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.test_table_id_seq', 3, true);
+
+
+--
+-- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_id_seq', 1, true);
+
+
+--
+-- Name: cart cart_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart
+    ADD CONSTRAINT cart_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cart_product cart_product_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart_product
+    ADD CONSTRAINT cart_product_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: category category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.category
+    ADD CONSTRAINT category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctrine_migration_versions doctrine_migration_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctrine_migration_versions
+    ADD CONSTRAINT doctrine_migration_versions_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: order order_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."order"
+    ADD CONSTRAINT order_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: order_product order_product_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_product
+    ADD CONSTRAINT order_product_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product_image product_image_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_image
+    ADD CONSTRAINT product_image_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: product product_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product
+    ADD CONSTRAINT product_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: reset_password_request reset_password_request_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reset_password_request
+    ADD CONSTRAINT reset_password_request_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: test_api_entity test_api_entity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.test_api_entity
+    ADD CONSTRAINT test_api_entity_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: test_table test_table_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.test_table
+    ADD CONSTRAINT test_table_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: idx_2530ade64584665a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_2530ade64584665a ON public.order_product USING btree (product_id);
+
+
+--
+-- Name: idx_2530ade6851f0d95; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_2530ade6851f0d95 ON public.order_product USING btree (app_order_id);
+
+
+--
+-- Name: idx_2890ccaa1ad5cdbf; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_2890ccaa1ad5cdbf ON public.cart_product USING btree (cart_id);
+
+
+--
+-- Name: idx_2890ccaa4584665a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_2890ccaa4584665a ON public.cart_product USING btree (product_id);
+
+
+--
+-- Name: idx_64617f034584665a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_64617f034584665a ON public.product_image USING btree (product_id);
+
+
+--
+-- Name: idx_7ce748aa76ed395; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_7ce748aa76ed395 ON public.reset_password_request USING btree (user_id);
+
+
+--
+-- Name: idx_d34a04ad12469de2; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_d34a04ad12469de2 ON public.product USING btree (category_id);
+
+
+--
+-- Name: idx_f52993987e3c61f9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_f52993987e3c61f9 ON public."order" USING btree (owner_id);
+
+
+--
+-- Name: uniq_64c19c1989d9b62; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX uniq_64c19c1989d9b62 ON public.category USING btree (slug);
+
+
+--
+-- Name: uniq_8d93d649e7927c74; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX uniq_8d93d649e7927c74 ON public."user" USING btree (email);
+
+
+--
+-- Name: order_product fk_2530ade64584665a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_product
+    ADD CONSTRAINT fk_2530ade64584665a FOREIGN KEY (product_id) REFERENCES public.product(id);
+
+
+--
+-- Name: order_product fk_2530ade6851f0d95; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_product
+    ADD CONSTRAINT fk_2530ade6851f0d95 FOREIGN KEY (app_order_id) REFERENCES public."order"(id);
+
+
+--
+-- Name: cart_product fk_2890ccaa1ad5cdbf; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart_product
+    ADD CONSTRAINT fk_2890ccaa1ad5cdbf FOREIGN KEY (cart_id) REFERENCES public.cart(id);
+
+
+--
+-- Name: cart_product fk_2890ccaa4584665a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cart_product
+    ADD CONSTRAINT fk_2890ccaa4584665a FOREIGN KEY (product_id) REFERENCES public.product(id);
+
+
+--
+-- Name: product_image fk_64617f034584665a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_image
+    ADD CONSTRAINT fk_64617f034584665a FOREIGN KEY (product_id) REFERENCES public.product(id);
+
+
+--
+-- Name: reset_password_request fk_7ce748aa76ed395; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reset_password_request
+    ADD CONSTRAINT fk_7ce748aa76ed395 FOREIGN KEY (user_id) REFERENCES public."user"(id);
+
+
+--
+-- Name: product fk_d34a04ad12469de2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product
+    ADD CONSTRAINT fk_d34a04ad12469de2 FOREIGN KEY (category_id) REFERENCES public.category(id);
+
+
+--
+-- Name: order fk_f52993987e3c61f9; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."order"
+    ADD CONSTRAINT fk_f52993987e3c61f9 FOREIGN KEY (owner_id) REFERENCES public."user"(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
