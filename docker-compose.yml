@@ -50,7 +50,7 @@ services:
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
     container_name: pgadmin
     restart: always
     depends_on:

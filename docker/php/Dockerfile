@@ -1,4 +1,4 @@
-FROM php:fpm-alpine
+FROM php:8.2-fpm-alpine
 
 # Copy php config
 COPY ./conf/php.ini /usr/local/etc/php/php.ini

@@ -23,6 +23,30 @@ psql-connect:
 	docker-compose exec postgres psql -U postgres ranked_choice_2
 
 
+##
+## Накатить все миграции при первом запуске проекта
+## -----------
+up-all-migrates:
+	docker-compose exec php bin/console doctrine:migrations:migrate
+
+##
+## Распаковать дамп с inserts
+## -----------
+restore-dump:
+	cat inserts.sql | docker exec -i postgres psql -U postgres -d ranked_choice_2
+
+
+##
+## Создает полный дамп
+## -----------
+dump:
+	docker exec postgres pg_dump -U postgres ranked_choice_2 > backup
+
+##
+## Создает дамп только inserts
+## -----------
+dump-only-inserts:
+	docker exec postgres pg_dump -U postgres --column-inserts --data-only ranked_choice_2 > inserts.sql
 
 ##
 ## TESTING
