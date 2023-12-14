@@ -14,7 +14,8 @@ build:
 	docker-compose down -v --remove-orphans
 	docker-compose rm -vsf
 	docker-compose up -d --build
-
+	docker-compose exec php bin/console doctrine:migrations:migrate
+	cat inserts.sql | docker exec -i postgres psql -U postgres -d ranked_choice_2
 
 ##
 ## UTILS
@@ -24,10 +25,23 @@ psql-connect:
 
 
 ##
-## Накатить все миграции при первом запуске проекта
+## Накатить все миграции
 ## -----------
-up-all-migrates:
+migrate:
 	docker-compose exec php bin/console doctrine:migrations:migrate
+
+##
+## Откатить последнюю миграцию
+## -----------
+rollback:
+	docker-compose exec php bin/console doctrine:migrations:migrate prev
+
+
+##
+## Создать миграцию
+## -----------
+migration:
+	docker-compose exec php bin/console make:migration
 
 ##
 ## Распаковать дамп с inserts
