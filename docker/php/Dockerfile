@@ -3,8 +3,12 @@ FROM php:8.2-fpm-alpine
 # Copy php config
 COPY ./conf/php.ini /usr/local/etc/php/php.ini
 
+RUN apk update
+
 # Packages
 RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf icu-dev bash
+
+RUN apk update && rm -rf /var/cache/apk/*
 
 # Postgres
 #RUN apk add --no-cache libpq-dev \
@@ -23,11 +27,18 @@ RUN docker-php-ext-configure intl \
 # RUN docker-php-ext-install opcache
 
 # XDebug
-ARG INSTALL_XDEBUG=false
+ARG INSTALL_XDEBUG=true
+
 RUN if [ ${INSTALL_XDEBUG} = true ]; \
   then \
-    pecl install xdebug && docker-php-ext-enable xdebug; \
-  fi;
+    apk add --no-cache linux-headers  \
+    && apk add --update --no-cache --virtual .build-dependencies $PHPIZE_DEPS \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && pecl clear-cache \
+    && apk del .build-dependencies; \
+fi;
+
 
 # Xdebug config
 COPY ./conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
@@ -44,7 +55,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Symfony CLI
 RUN curl -sS https://get.symfony.com/cli/installer | bash
-# RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
 # Git config
 RUN git config --global user.email "email@domain.com" \
