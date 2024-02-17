@@ -28,7 +28,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - PHP_IDE_CONFIG=serverName=Docker
+#      - PHP_IDE_CONFIG="serverName=Docker"
     depends_on:
       - postgres
     volumes:
