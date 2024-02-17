@@ -14,7 +14,7 @@ build:
 	docker-compose down -v --remove-orphans
 	docker-compose rm -vsf
 	docker-compose up -d --build
-	docker-compose exec php bin/console doctrine:migrations:migrate
+	docker-compose exec php bin/console doctrine:migrations:migrate --no-interaction
 	cat inserts.sql | docker exec -i postgres psql -U postgres -d ranked_choice_2
 
 ##
