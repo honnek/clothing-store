@@ -51,7 +51,8 @@ class DefaultControllerTest extends WebTestCase
             '/en/login',
             Response::HTTP_FOUND,
             sprintf('The %s URL redirects to the login page', '/')
-        );    }
+        );
+    }
 
     public function getPublicUrls(): ?\Generator
     {
