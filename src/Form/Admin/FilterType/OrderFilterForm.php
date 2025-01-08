@@ -2,7 +2,6 @@
 
 namespace App\Form\Admin\FilterType;
 
-use App\Entity\Order;
 use App\Entity\StaticStorage\OrderStatus;
 use App\Entity\User;
 use App\Form\DTO\EditOrderModel;

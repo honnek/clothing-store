@@ -53,10 +53,11 @@ INSERT INTO public.cart (id, session_id, created_at) VALUES (43, '7564497df268a1
 --
 -- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
+INSERT INTO public.category (id, title, slug, is_deleted) VALUES (1, 'Jeans', 'jeans', false);
+INSERT INTO public.category (id, title, slug, is_deleted) VALUES (2, 'Hats', 'hats', false);
+INSERT INTO public.category (id, title, slug, is_deleted) VALUES (3, 'Jackets', 'jackets', false);
 INSERT INTO public.category (id, title, slug, is_deleted) VALUES (4, 'Dresses', 'dresses', false);
-INSERT INTO public.category (id, title, slug, is_deleted) VALUES (5, 'Hats', 'hats', false);
-INSERT INTO public.category (id, title, slug, is_deleted) VALUES (6, 'Sneakers', 'sneakers', false);
+INSERT INTO public.category (id, title, slug, is_deleted) VALUES (5, 'Sneakers', 'sneakers', false);
 
 
 --
@@ -104,7 +105,7 @@ INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."user" (id, email, roles, password, is_verified, full_name, phone, address, zipcode, is_deleted, facebook_id, google_id) VALUES (1, 'heyBroDude@dude.com', '["ROLE_ADMIN"]', '$2y$13$x0ucM2C7VxQzKd7uHYMm..QadJBi.GXasxgqIs.5moSiVaco.BKqy', true, 'Дмитрий Андреевич Махинов', '+79002776758', 'ул. Лунная, д.5 кв.1', 350906, false, NULL, NULL);
+INSERT INTO public."user" (id, email, roles, password, is_verified, full_name, phone, address, zipcode, is_deleted, facebook_id, google_id) VALUES (1, 'heyBroDude@dude.com', '["ROLE_ADMIN"]', '$2y$13$x0ucM2C7VxQzKd7uHYMm..QadJBi.GXasxgqIs.5moSiVaco.BKqy', true, 'Большущий Дядя Мальчик', '+7900777777', 'ул. Путина, д.5 кв.1', 350000, false, NULL, NULL);
 
 
 --
