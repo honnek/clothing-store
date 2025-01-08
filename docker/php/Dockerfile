@@ -6,7 +6,7 @@ COPY ./conf/php.ini /usr/local/etc/php/php.ini
 RUN apk update
 
 # Packages
-RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf icu-dev bash
+RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf icu-dev bash php-bcmath php-sockets
 
 RUN apk update && rm -rf /var/cache/apk/*
 
@@ -22,6 +22,10 @@ RUN docker-php-ext-install pdo pdo_pgsql
 # Intl
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install intl
+
+RUN docker-php-ext-install bcmath
+RUN apk add --no-cache linux-headers
+RUN docker-php-ext-install sockets
 
 # OPCache (if you need it by any means)
 # RUN docker-php-ext-install opcache
@@ -88,9 +92,9 @@ RUN apk add --no-cache \
     && docker-php-ext-install zip
 
 # Setup chromium and panther
-RUN apk add --no-cache \
-        chromium \
-        chromium-chromedriver
+#RUN apk add --no-cache \
+#        chromium \
+#        chromium-chromedriver
 ENV PANTHER_CHROME_DRIVER_BINARY /usr/lib/chromium/chromedriver
 ENV PANTHER_NO_SANDBOX 1
 ENV PANTHER_WEB_SERVER_PORT 9800

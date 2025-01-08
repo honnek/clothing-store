@@ -23,7 +23,9 @@ class OrderController extends AbstractController
         OrderFormHandler $orderFormHandler
     ): Response
     {
-        $filterForm = $this->createForm(OrderFilterForm::class, new EditOrderModel())->handleRequest($request);
+        $filterForm = $this->createForm(OrderFilterForm::class, EditOrderModel::makeFromOrder());
+        $filterForm->handleRequest($request);
+
         $pagination = $orderFormHandler->processOrderFiltersForm($request, $filterForm);
 
         return $this->render('admin/order/list.html.twig', [

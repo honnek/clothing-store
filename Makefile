@@ -10,10 +10,13 @@ down:
 clear:
 	docker system prune --all --volumes --force
 
-build:
+rebuild:
 	docker-compose down -v --remove-orphans
 	docker-compose rm -vsf
 	docker-compose up -d --build
+
+
+migrations-first-run:
 	docker-compose exec php bin/console doctrine:migrations:migrate --no-interaction
 	cat inserts.sql | docker exec -i postgres psql -U postgres -d ranked_choice_2
 
