@@ -40,14 +40,12 @@ class DefaultController extends AbstractController
         }
 
         $form = $this->createForm(EditProductFormType::class, $product);
-        /** Присваиваем поля из Request в форму */
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /** Сохраним модель в бд */
+            /** @todo обязательно вынести в сервис */
             $entityManager->persist($product);
-            /** Обновим бд */
             $entityManager->flush();
 
             /** После сохранения продукта редирект на текущий продукт */
