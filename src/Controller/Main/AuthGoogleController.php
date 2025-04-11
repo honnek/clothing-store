@@ -23,10 +23,7 @@ class AuthGoogleController extends AbstractController
         $client = $clientRegistry->getClient('google_main');
         try {
             $user = $client->fetchUser();
-
             dd($user);
-
-
         } catch (IdentityProviderException $e) {
             var_dump($e->getMessage()); die;
         }

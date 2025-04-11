@@ -38,6 +38,7 @@ class CartApiController extends AbstractController
 
         $cartProduct = $cartProductRepository->findOneBy(['cart' => $cart, 'product' => $product]);
         if (!$cartProduct) {
+            /** @todo вынести в сервис */
             $cartProduct = new CartProduct();
             $cartProduct->setQuantity(1);
             $cartProduct->setCart($cart);

@@ -34,7 +34,9 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+
+
+            /** @todo вынести в сервис */
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -45,7 +47,6 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('main_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('robot@ranked-choice.com', 'Robot'))
@@ -53,7 +54,6 @@ class RegistrationController extends AbstractController
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('main/email/security/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
 
             return $this->redirectToRoute('main_homepage');
         }
