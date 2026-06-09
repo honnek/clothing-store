@@ -1,6 +1,6 @@
 GO ?= go
 
-.PHONY: build vet test lint fmt tidy
+.PHONY: build vet test test-integration lint fmt tidy
 
 build:
 	$(GO) build ./...
@@ -10,6 +10,10 @@ vet:
 
 test:
 	$(GO) test ./...
+
+# Тесты на testcontainers (docker), под build-тегом integration.
+test-integration:
+	$(GO) test -tags=integration ./...
 
 fmt:
 	gofmt -w .
