@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package catalog.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/honnek/ranked-choice-shop/services/api/gen/catalog/v1;catalogv1";
+
+// Product наружу адресуется по uuid. Внутренний последовательный id здесь не
+// отдаём: по нему ссылаются только cart/order между сервисами.
+message Product {
+  string uuid = 1;
+  string title = 2;
+  string price = 3;
+  int32 quality = 4;
+  string description = 5;
+  string slug = 6;
+  optional int32 category_id = 7;
+  bool is_published = 8;
+}
+
+message Category {
+  int32 id = 1;
+  string title = 2;
+  string slug = 3;
+}
+
+message ListProductsRequest {
+  optional int32 category_id = 1;
+  optional bool published = 2;
+  optional string search = 3;
+  int32 limit = 4;
+  int32 offset = 5;
+}
+
+message ListProductsResponse {
+  repeated Product items = 1;
+  int64 total = 2;
+}
+
+message GetProductRequest {
+  string uuid = 1;
+}
+
+message GetProductResponse {
+  Product product = 1;
+}
+
+message ListCategoriesRequest {}
+
+message ListCategoriesResponse {
+  repeated Category items = 1;
+}
+
+service CatalogService {
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse) {
+    option (google.api.http) = {get: "/v1/products"};
+  }
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse) {
+    option (google.api.http) = {get: "/v1/products/{uuid}"};
+  }
+  rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse) {
+    option (google.api.http) = {get: "/v1/categories"};
+  }
+}
