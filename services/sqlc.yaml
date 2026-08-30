@@ -10,3 +10,16 @@ sql:
         sql_package: pgx/v5
         emit_json_tags: true
         emit_pointers_for_null_types: true
+  # Заказу нужны и таблицы монолита, и то, что довешивают goose-миграции.
+  - engine: postgresql
+    schema:
+      - internal/order/adapter/postgres/schema.sql
+      - migrations
+    queries: internal/order/adapter/postgres/query.sql
+    gen:
+      go:
+        package: orderdb
+        out: internal/order/adapter/postgres/orderdb
+        sql_package: pgx/v5
+        emit_json_tags: true
+        emit_pointers_for_null_types: true

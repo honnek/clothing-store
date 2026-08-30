@@ -1,6 +1,8 @@
 GO ?= go
 
-.PHONY: build vet test test-integration lint fmt tidy
+POSTGRES_DSN ?= postgres://postgres:postgres@localhost:5432/lumewear_2?sslmode=disable
+
+.PHONY: build vet test test-integration lint fmt tidy migrate
 
 build:
 	$(GO) build ./...
@@ -31,3 +33,7 @@ lint:
 
 tidy:
 	$(GO) mod tidy
+
+# Накатывает goose-миграции заказа (остатки, идемпотентность, outbox) на общую с PHP базу.
+migrate:
+	goose -dir migrations postgres "$(POSTGRES_DSN)" up
