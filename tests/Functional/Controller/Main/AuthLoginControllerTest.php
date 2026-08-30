@@ -42,7 +42,7 @@ class AuthLoginControllerTest extends PantherTestCase
 
         $this->assertSame(self::$baseUri . '/en/profile', $client->getCurrentURL());
 
-        $this->assertPageTitleContains('My profile - RankedChoice');
+        $this->assertPageTitleContains('My profile - Lumewear');
         $this->assertSelectorTextContains('#page_header_title', 'Welcome, to your profile!');
     }
 
@@ -54,7 +54,7 @@ class AuthLoginControllerTest extends PantherTestCase
 //        $client = Client::createSeleniumClient(
 //            'http://selenium-hub:4444/wd/hub',
 //            null,
-//            'http://ranked-choiceshop-chrome-1:5900',
+//            'http://lumewearshop-chrome-1:5900',
 //        );
 //
 //        $client->request('GET', '/en/login');

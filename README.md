@@ -1,4 +1,4 @@
-# Ranked-Choice Shop
+# Lumewear Shop
 
 ![Go](https://img.shields.io/badge/Go-1.21-00ADD8?logo=go&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-8.1-777BB4?logo=php&logoColor=white)

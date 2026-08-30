@@ -16,13 +16,13 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/config"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/health"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/httpserver"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/log"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/otel"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/postgres"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/redis"
+	"github.com/honnek/lumewear-shop/services/internal/platform/config"
+	"github.com/honnek/lumewear-shop/services/internal/platform/health"
+	"github.com/honnek/lumewear-shop/services/internal/platform/httpserver"
+	"github.com/honnek/lumewear-shop/services/internal/platform/log"
+	"github.com/honnek/lumewear-shop/services/internal/platform/otel"
+	"github.com/honnek/lumewear-shop/services/internal/platform/postgres"
+	"github.com/honnek/lumewear-shop/services/internal/platform/redis"
 )
 
 func main() {

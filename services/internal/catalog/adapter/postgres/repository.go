@@ -9,8 +9,8 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/adapter/postgres/catalogdb"
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/domain"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/adapter/postgres/catalogdb"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/domain"
 )
 
 type Repository struct {

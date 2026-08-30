@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package cart.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/honnek/lumewear-shop/services/api/gen/cart/v1;cartv1";
+
+message CartItem {
+  string product_uuid = 1;
+  string title = 2;
+  string unit_price = 3;
+  int32 quantity = 4;
+  string line_total = 5;
+}
+
+message Cart {
+  string session_id = 1;
+  repeated CartItem items = 2;
+  string total = 3;
+}
+
+message GetCartRequest {
+  string session_id = 1;
+}
+
+message AddItemRequest {
+  string session_id = 1;
+  string product_uuid = 2;
+  int32 quantity = 3;
+}
+
+message UpdateItemRequest {
+  string session_id = 1;
+  string product_uuid = 2;
+  int32 quantity = 3;
+}
+
+message RemoveItemRequest {
+  string session_id = 1;
+  string product_uuid = 2;
+}
+
+message GetCartResponse {
+  Cart cart = 1;
+}
+
+message AddItemResponse {
+  Cart cart = 1;
+}
+
+message UpdateItemResponse {
+  Cart cart = 1;
+}
+
+message RemoveItemResponse {
+  Cart cart = 1;
+}
+
+service CartService {
+  rpc GetCart(GetCartRequest) returns (GetCartResponse) {
+    option (google.api.http) = {get: "/v1/carts/{session_id}"};
+  }
+  rpc AddItem(AddItemRequest) returns (AddItemResponse) {
+    option (google.api.http) = {
+      post: "/v1/carts/{session_id}/items"
+      body: "*"
+    };
+  }
+  rpc UpdateItem(UpdateItemRequest) returns (UpdateItemResponse) {
+    option (google.api.http) = {
+      patch: "/v1/carts/{session_id}/items/{product_uuid}"
+      body: "*"
+    };
+  }
+  rpc RemoveItem(RemoveItemRequest) returns (RemoveItemResponse) {
+    option (google.api.http) = {delete: "/v1/carts/{session_id}/items/{product_uuid}"};
+  }
+}

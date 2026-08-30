@@ -11,9 +11,9 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
 
-	catalogv1 "github.com/honnek/ranked-choice-shop/services/api/gen/catalog/v1"
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/domain"
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/usecase"
+	catalogv1 "github.com/honnek/lumewear-shop/services/api/gen/catalog/v1"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/domain"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/usecase"
 )
 
 type fakeRepo struct{}

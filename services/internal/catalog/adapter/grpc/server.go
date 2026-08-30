@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	catalogv1 "github.com/honnek/ranked-choice-shop/services/api/gen/catalog/v1"
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/domain"
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/usecase"
+	catalogv1 "github.com/honnek/lumewear-shop/services/api/gen/catalog/v1"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/domain"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/usecase"
 )
 
 type Server struct {

@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/domain"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/domain"
 )
 
 const (

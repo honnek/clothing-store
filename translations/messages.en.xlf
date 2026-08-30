@@ -15,10 +15,10 @@
     </unit>
     <unit id="sBaOftX" name="The changes have been saved">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Admin\CategoryController.php:42</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Admin\OrderController.php:49</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Admin\ProductController.php:50</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Admin\UserController.php:53</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Admin\CategoryController.php:42</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Admin\OrderController.php:49</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Admin\ProductController.php:50</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Admin\UserController.php:53</note>
       </notes>
       <segment>
         <source>The changes have been saved</source>
@@ -27,10 +27,10 @@
     </unit>
     <unit id="q4J_P_F" name="Something went wrong">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Admin\CategoryController.php:48</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Admin\OrderController.php:55</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Admin\ProductController.php:56</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Admin\UserController.php:59</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Admin\CategoryController.php:48</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Admin\OrderController.php:55</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Admin\ProductController.php:56</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Admin\UserController.php:59</note>
       </notes>
       <segment>
         <source>Something went wrong</source>
@@ -39,7 +39,7 @@
     </unit>
     <unit id="kQWnsB7" name="Your email address has been verified.">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Controller\Main\RegistrationController.php:91</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Controller\Main\RegistrationController.php:91</note>
       </notes>
       <segment>
         <source>Your email address has been verified.</source>
@@ -48,8 +48,8 @@
     </unit>
     <unit id="9KqvQi7" name="Title (from class)">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditCategoryFormType.php:16</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditProductFormType.php:26</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditCategoryFormType.php:16</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditProductFormType.php:26</note>
       </notes>
       <segment>
         <source>Title (from class)</source>
@@ -58,7 +58,7 @@
     </unit>
     <unit id="BzwWNMS" name="status">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditOrderFormType.php:20</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditOrderFormType.php:20</note>
       </notes>
       <segment>
         <source>status</source>
@@ -67,7 +67,7 @@
     </unit>
     <unit id="EYXzfTO" name="deleted">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditOrderFormType.php:28</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditOrderFormType.php:28</note>
       </notes>
       <segment>
         <source>deleted</source>
@@ -76,7 +76,7 @@
     </unit>
     <unit id="tRLZfny" name="User">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditOrderFormType.php:35</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditOrderFormType.php:35</note>
       </notes>
       <segment>
         <source>User</source>
@@ -85,7 +85,7 @@
     </unit>
     <unit id="w97IUQs" name="Price (from class)">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditProductFormType.php:30</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditProductFormType.php:30</note>
       </notes>
       <segment>
         <source>Price (from class)</source>
@@ -94,7 +94,7 @@
     </unit>
     <unit id="rO8sFbz" name="quality">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditProductFormType.php:38</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditProductFormType.php:38</note>
       </notes>
       <segment>
         <source>quality</source>
@@ -103,7 +103,7 @@
     </unit>
     <unit id="yQRveje" name="description">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditProductFormType.php:44</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditProductFormType.php:44</note>
       </notes>
       <segment>
         <source>description</source>
@@ -112,7 +112,7 @@
     </unit>
     <unit id="7bLNO3T" name="category">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditProductFormType.php:51</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditProductFormType.php:51</note>
       </notes>
       <segment>
         <source>category</source>
@@ -121,7 +121,7 @@
     </unit>
     <unit id="wBnoRUg" name="Chose new image">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditProductFormType.php:60</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditProductFormType.php:60</note>
       </notes>
       <segment>
         <source>Chose new image</source>
@@ -130,7 +130,7 @@
     </unit>
     <unit id="WX.GxT8" name="Is published">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditProductFormType.php:67</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditProductFormType.php:67</note>
       </notes>
       <segment>
         <source>Is published</source>
@@ -139,7 +139,7 @@
     </unit>
     <unit id="4Y.zskP" name="Is deleted">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditProductFormType.php:75</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditProductFormType.php:75</note>
       </notes>
       <segment>
         <source>Is deleted</source>
@@ -148,7 +148,7 @@
     </unit>
     <unit id="DSXIsdt" name="New email">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditUserFormType.php:19</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditUserFormType.php:19</note>
       </notes>
       <segment>
         <source>New email</source>
@@ -157,8 +157,8 @@
     </unit>
     <unit id="PdnfREH" name="New password">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditUserFormType.php:27</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:26</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditUserFormType.php:27</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ChangePasswordFormType.php:26</note>
       </notes>
       <segment>
         <source>New password</source>
@@ -167,7 +167,7 @@
     </unit>
     <unit id="wlM3BVR" name="Roles">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditUserFormType.php:35</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditUserFormType.php:35</note>
       </notes>
       <segment>
         <source>Roles</source>
@@ -176,7 +176,7 @@
     </unit>
     <unit id="jgDN9x_" name="Full Name">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditUserFormType.php:44</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditUserFormType.php:44</note>
       </notes>
       <segment>
         <source>Full Name</source>
@@ -185,7 +185,7 @@
     </unit>
     <unit id="vYLPFmm" name="Number">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditUserFormType.php:51</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditUserFormType.php:51</note>
       </notes>
       <segment>
         <source>Number</source>
@@ -194,7 +194,7 @@
     </unit>
     <unit id="2Ayb_RD" name="address">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditUserFormType.php:58</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditUserFormType.php:58</note>
       </notes>
       <segment>
         <source>address</source>
@@ -203,7 +203,7 @@
     </unit>
     <unit id="A9vuMpO" name="zipcode">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditUserFormType.php:65</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditUserFormType.php:65</note>
       </notes>
       <segment>
         <source>zipcode</source>
@@ -212,7 +212,7 @@
     </unit>
     <unit id="tI.znC4" name="Deleted">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Admin\EditUserFormType.php:72</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Admin\EditUserFormType.php:72</note>
       </notes>
       <segment>
         <source>Deleted</source>
@@ -221,7 +221,7 @@
     </unit>
     <unit id="Hkmh4Tp" name="Repeat Password">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:40</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ChangePasswordFormType.php:40</note>
       </notes>
       <segment>
         <source>Repeat Password</source>
@@ -230,7 +230,7 @@
     </unit>
     <unit id="RZQ0CeQ" name="Plain password">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:17</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ChangePasswordFormType.php:17</note>
       </notes>
       <segment>
         <source>Plain password</source>
@@ -239,7 +239,7 @@
     </unit>
     <unit id="s2JwFuf" name="Enter your full name">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ProfileEditFormType.php:16</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ProfileEditFormType.php:16</note>
       </notes>
       <segment>
         <source>Enter your full name</source>
@@ -248,7 +248,7 @@
     </unit>
     <unit id="SaKuyOs" name="Enter your phone">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ProfileEditFormType.php:19</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ProfileEditFormType.php:19</note>
       </notes>
       <segment>
         <source>Enter your phone</source>
@@ -257,7 +257,7 @@
     </unit>
     <unit id="BhddwJ0" name="Enter your address">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ProfileEditFormType.php:22</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ProfileEditFormType.php:22</note>
       </notes>
       <segment>
         <source>Enter your address</source>
@@ -266,7 +266,7 @@
     </unit>
     <unit id="TXm0FaS" name="Enter your zipcode">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ProfileEditFormType.php:25</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ProfileEditFormType.php:25</note>
       </notes>
       <segment>
         <source>Enter your zipcode</source>
@@ -275,7 +275,7 @@
     </unit>
     <unit id="kZ34wmB" name="Please enter email">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:22</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:22</note>
       </notes>
       <segment>
         <source>Please enter email</source>
@@ -284,7 +284,7 @@
     </unit>
     <unit id="PlYICFm" name="I agree to the &lt;a href=&quot;#&quot;&gt; privacy policy &lt;/a&gt; *">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:39</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:39</note>
       </notes>
       <segment>
         <source>I agree to the &lt;a href="#"&gt; privacy policy &lt;/a&gt; *</source>
@@ -293,7 +293,7 @@
     </unit>
     <unit id="wGv5ZwF" name="Enter your password">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:56</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:56</note>
       </notes>
       <segment>
         <source>Enter your password</source>
@@ -302,7 +302,7 @@
     </unit>
     <unit id="KDf2_hy" name="Enter your email">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:28</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:28</note>
       </notes>
       <segment>
         <source>Enter your email</source>
@@ -311,7 +311,7 @@
     </unit>
     <unit id="lpzL089" name="Email">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ResetPasswordRequestFormType.php:15</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ResetPasswordRequestFormType.php:15</note>
       </notes>
       <segment>
         <source>Email</source>

@@ -24,6 +24,9 @@ type Config struct {
 	RedisAddr string `env:"REDIS_ADDR" envDefault:"redis:6379"`
 	RedisDB   int    `env:"REDIS_DB" envDefault:"0"`
 
+	// CatalogGRPCAddr — адрес catalog-service для межсервисных gRPC-вызовов (cart/order).
+	CatalogGRPCAddr string `env:"CATALOG_GRPC_ADDR" envDefault:"catalog-service:9090"`
+
 	// OTLPEndpoint: пустое значение полностью выключает трейсинг (удобно в dev).
 	OTLPEndpoint string `env:"OTEL_EXPORTER_OTLP_ENDPOINT"`
 

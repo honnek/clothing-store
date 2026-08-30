@@ -3,7 +3,7 @@
   <file id="validators.ru">
     <unit id="YRKYC4." name="There is already an account with this email">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Entity\User.php:0</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Entity\User.php:0</note>
       </notes>
       <segment>
         <source>There is already an account with this email</source>
@@ -12,7 +12,7 @@
     </unit>
     <unit id="TdLhlyP" name="The password fields must match.">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:18</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ChangePasswordFormType.php:18</note>
       </notes>
       <segment>
         <source>The password fields must match.</source>
@@ -21,8 +21,8 @@
     </unit>
     <unit id="YXZ26gK" name="Please enter a password">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:29</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:66</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ChangePasswordFormType.php:29</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:66</note>
       </notes>
       <segment>
         <source>Please enter a password</source>
@@ -31,8 +31,8 @@
     </unit>
     <unit id=".esazsm" name="Your password should be at least {{ limit }} characters">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ChangePasswordFormType.php:33</note>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:70</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ChangePasswordFormType.php:33</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:70</note>
       </notes>
       <segment>
         <source>Your password should be at least {{ limit }} characters</source>
@@ -41,7 +41,7 @@
     </unit>
     <unit id="uf3I_O7" name="Please fill the field">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:32</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:32</note>
       </notes>
       <segment>
         <source>Please fill the field</source>
@@ -50,7 +50,7 @@
     </unit>
     <unit id="6Q8Inma" name="Not valid Email">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:35</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:35</note>
       </notes>
       <segment>
         <source>Not valid Email</source>
@@ -59,7 +59,7 @@
     </unit>
     <unit id="Ys3QRDR" name="Please confirm policy">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\RegistrationFormType.php:52</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\RegistrationFormType.php:52</note>
       </notes>
       <segment>
         <source>Please confirm policy</source>
@@ -68,7 +68,7 @@
     </unit>
     <unit id="Fe2zEyl" name="Please enter your email">
       <notes>
-        <note category="file-source" priority="1">ranked-choice.shop\src\Form\Main\ResetPasswordRequestFormType.php:23</note>
+        <note category="file-source" priority="1">lumewear.shop\src\Form\Main\ResetPasswordRequestFormType.php:23</note>
       </notes>
       <segment>
         <source>Please enter your email</source>

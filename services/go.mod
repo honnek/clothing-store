@@ -1,4 +1,4 @@
-module github.com/honnek/ranked-choice-shop/services
+module github.com/honnek/lumewear-shop/services
 
 go 1.21
 
@@ -8,6 +8,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.0
 	github.com/jackc/pgx/v5 v5.5.5
 	github.com/redis/go-redis/v9 v9.5.1
+	github.com/shopspring/decimal v1.4.0
 	github.com/testcontainers/testcontainers-go v0.31.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.31.0
 	go.opentelemetry.io/otel v1.24.0

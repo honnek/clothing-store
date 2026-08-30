@@ -526,7 +526,7 @@ const file_catalog_v1_catalog_proto_rawDesc = "" +
 	"\fListProducts\x12\x1f.catalog.v1.ListProductsRequest\x1a .catalog.v1.ListProductsResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\x12\f/v1/products\x12h\n" +
 	"\n" +
 	"GetProduct\x12\x1d.catalog.v1.GetProductRequest\x1a\x1e.catalog.v1.GetProductResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/products/{uuid}\x12o\n" +
-	"\x0eListCategories\x12!.catalog.v1.ListCategoriesRequest\x1a\".catalog.v1.ListCategoriesResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/categoriesBLZJgithub.com/honnek/ranked-choice-shop/services/api/gen/catalog/v1;catalogv1b\x06proto3"
+	"\x0eListCategories\x12!.catalog.v1.ListCategoriesRequest\x1a\".catalog.v1.ListCategoriesResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/categoriesBGZEgithub.com/honnek/lumewear-shop/services/api/gen/catalog/v1;catalogv1b\x06proto3"
 
 var (
 	file_catalog_v1_catalog_proto_rawDescOnce sync.Once

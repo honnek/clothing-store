@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/domain"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/domain"
 )
 
 type fakeRepo struct {

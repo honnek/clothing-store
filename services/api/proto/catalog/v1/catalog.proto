@@ -4,7 +4,7 @@ package catalog.v1;
 
 import "google/api/annotations.proto";
 
-option go_package = "github.com/honnek/ranked-choice-shop/services/api/gen/catalog/v1;catalogv1";
+option go_package = "github.com/honnek/lumewear-shop/services/api/gen/catalog/v1;catalogv1";
 
 // Product наружу адресуется по uuid. Внутренний последовательный id здесь не
 // отдаём: по нему ссылаются только cart/order между сервисами.

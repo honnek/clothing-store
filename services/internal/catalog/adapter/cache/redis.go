@@ -8,8 +8,8 @@ import (
 
 	goredis "github.com/redis/go-redis/v9"
 
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/domain"
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/usecase"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/domain"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/usecase"
 )
 
 // Cache — read-through декоратор над репозиторием. Каталог редко меняется и пишется

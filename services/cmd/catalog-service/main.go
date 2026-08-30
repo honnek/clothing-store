@@ -13,20 +13,22 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc/reflection"
 
-	catalogv1 "github.com/honnek/ranked-choice-shop/services/api/gen/catalog/v1"
-	cacheadapter "github.com/honnek/ranked-choice-shop/services/internal/catalog/adapter/cache"
-	grpcadapter "github.com/honnek/ranked-choice-shop/services/internal/catalog/adapter/grpc"
-	pgadapter "github.com/honnek/ranked-choice-shop/services/internal/catalog/adapter/postgres"
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/transport"
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/usecase"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/config"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/grpcserver"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/health"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/httpserver"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/log"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/otel"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/postgres"
-	"github.com/honnek/ranked-choice-shop/services/internal/platform/redis"
+	catalogv1 "github.com/honnek/lumewear-shop/services/api/gen/catalog/v1"
+	"github.com/honnek/lumewear-shop/services/api/openapi"
+	cacheadapter "github.com/honnek/lumewear-shop/services/internal/catalog/adapter/cache"
+	grpcadapter "github.com/honnek/lumewear-shop/services/internal/catalog/adapter/grpc"
+	pgadapter "github.com/honnek/lumewear-shop/services/internal/catalog/adapter/postgres"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/transport"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/usecase"
+	"github.com/honnek/lumewear-shop/services/internal/platform/config"
+	"github.com/honnek/lumewear-shop/services/internal/platform/gateway"
+	"github.com/honnek/lumewear-shop/services/internal/platform/grpcserver"
+	"github.com/honnek/lumewear-shop/services/internal/platform/health"
+	"github.com/honnek/lumewear-shop/services/internal/platform/httpserver"
+	"github.com/honnek/lumewear-shop/services/internal/platform/log"
+	"github.com/honnek/lumewear-shop/services/internal/platform/otel"
+	"github.com/honnek/lumewear-shop/services/internal/platform/postgres"
+	"github.com/honnek/lumewear-shop/services/internal/platform/redis"
 )
 
 const cacheTTL = time.Minute
@@ -98,7 +100,7 @@ func run() error {
 	mux.HandleFunc("/healthz", hc.Live)
 	mux.HandleFunc("/readyz", hc.Ready)
 	mux.Handle("/v1/", gw)
-	mux.Handle("/swagger/", http.StripPrefix("/swagger", transport.SwaggerHandler()))
+	mux.Handle("/swagger/", http.StripPrefix("/swagger", gateway.SwaggerHandler(openapi.Catalog, "Catalog API")))
 	httpSrv := httpserver.New(cfg.HTTPAddr, mux)
 
 	logger.Info("catalog-service started", "grpc", cfg.GRPCAddr, "http", cfg.HTTPAddr)

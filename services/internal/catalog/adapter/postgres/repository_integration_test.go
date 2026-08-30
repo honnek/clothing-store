@@ -13,7 +13,7 @@ import (
 	tcpostgres "github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 
-	"github.com/honnek/ranked-choice-shop/services/internal/catalog/domain"
+	"github.com/honnek/lumewear-shop/services/internal/catalog/domain"
 )
 
 // setupRepo поднимает postgres в контейнере, накатывает схему и сид, отдаёт репозиторий.
