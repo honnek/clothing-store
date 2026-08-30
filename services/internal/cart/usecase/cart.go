@@ -16,6 +16,7 @@ type Repository interface {
 	Add(ctx context.Context, session, uuid string, delta int32) error
 	SetQty(ctx context.Context, session, uuid string, qty int32) error
 	Remove(ctx context.Context, session, uuid string) error
+	Clear(ctx context.Context, session string) error
 	Items(ctx context.Context, session string) (map[string]int32, error)
 }
 
@@ -69,6 +70,10 @@ func (c *Cart) RemoveItem(ctx context.Context, session, uuid string) (domain.Car
 		return domain.Cart{}, err
 	}
 	return c.GetCart(ctx, session)
+}
+
+func (c *Cart) Clear(ctx context.Context, session string) error {
+	return c.repo.Clear(ctx, session)
 }
 
 // GetCart собирает корзину: тянет количества из repo и обогащает их ценой/названием

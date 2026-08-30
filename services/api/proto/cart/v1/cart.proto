@@ -57,6 +57,12 @@ message RemoveItemResponse {
   Cart cart = 1;
 }
 
+message ClearCartRequest {
+  string session_id = 1;
+}
+
+message ClearCartResponse {}
+
 service CartService {
   rpc GetCart(GetCartRequest) returns (GetCartResponse) {
     option (google.api.http) = {get: "/v1/carts/{session_id}"};
@@ -75,5 +81,8 @@ service CartService {
   }
   rpc RemoveItem(RemoveItemRequest) returns (RemoveItemResponse) {
     option (google.api.http) = {delete: "/v1/carts/{session_id}/items/{product_uuid}"};
+  }
+  rpc ClearCart(ClearCartRequest) returns (ClearCartResponse) {
+    option (google.api.http) = {delete: "/v1/carts/{session_id}"};
   }
 }

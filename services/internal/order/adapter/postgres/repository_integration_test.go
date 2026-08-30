@@ -157,6 +157,27 @@ func TestCheckout(t *testing.T) {
 		}
 	})
 
+	t.Run("lookup by idempotency key", func(t *testing.T) {
+		created, err := repo.Checkout(ctx, req("key-lookup", "s2"), []domain.CheckoutLine{
+			{ProductUUID: blueHat, Quantity: 1},
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		found, err := repo.OrderByIdempotencyKey(ctx, "key-lookup")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if found.ID != created.ID || len(found.Items) != 1 {
+			t.Errorf("got %+v, want order %d with items", found, created.ID)
+		}
+
+		if _, err := repo.OrderByIdempotencyKey(ctx, "never-used"); !errors.Is(err, domain.ErrOrderNotFound) {
+			t.Errorf("err = %v, want ErrOrderNotFound", err)
+		}
+	})
+
 	t.Run("not enough stock", func(t *testing.T) {
 		_, err := repo.Checkout(ctx, req("key-toomuch", "s3"), []domain.CheckoutLine{
 			{ProductUUID: oldShoe, Quantity: 999},

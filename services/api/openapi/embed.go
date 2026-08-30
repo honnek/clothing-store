@@ -9,3 +9,6 @@ var Catalog []byte
 
 //go:embed cart/v1/cart.swagger.json
 var Cart []byte
+
+//go:embed order/v1/order.swagger.json
+var Order []byte

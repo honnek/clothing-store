@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package order.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/honnek/lumewear-shop/services/api/gen/order/v1;orderv1";
+
+// OrderStatus повторяет числовые статусы монолита: колонка "order".status общая,
+// поэтому UNSPECIFIED-нуля здесь нет — 0 это реальный CREATED.
+enum OrderStatus {
+  ORDER_STATUS_CREATED = 0;
+  ORDER_STATUS_PROCESSED = 1;
+  ORDER_STATUS_COMPLECTED = 2;
+  ORDER_STATUS_DELIVERED = 3;
+  ORDER_STATUS_DENIED = 4;
+}
+
+message OrderItem {
+  string product_uuid = 1;
+  string title = 2;
+  string unit_price = 3;
+  int32 quantity = 4;
+  string line_total = 5;
+}
+
+message Order {
+  int32 id = 1;
+  optional int32 owner_id = 2;
+  OrderStatus status = 3;
+  string total = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  repeated OrderItem items = 7;
+}
+
+// CheckoutRequest: idempotency_key можно не класть в тело, а прислать заголовком
+// Idempotency-Key — gateway пробрасывает его в метаданные.
+message CheckoutRequest {
+  string session_id = 1;
+  string idempotency_key = 2;
+  optional int32 owner_id = 3;
+}
+
+message CheckoutResponse {
+  Order order = 1;
+}
+
+message GetOrderRequest {
+  int32 id = 1;
+}
+
+message GetOrderResponse {
+  Order order = 1;
+}
+
+message ListOrdersRequest {
+  optional int32 owner_id = 1;
+  optional OrderStatus status = 2;
+  int32 limit = 3;
+  int32 offset = 4;
+}
+
+message ListOrdersResponse {
+  repeated Order items = 1;
+  int64 total = 2;
+}
+
+message UpdateOrderStatusRequest {
+  int32 id = 1;
+  OrderStatus status = 2;
+}
+
+message UpdateOrderStatusResponse {
+  Order order = 1;
+}
+
+service OrderService {
+  rpc Checkout(CheckoutRequest) returns (CheckoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/checkout"
+      body: "*"
+    };
+  }
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse) {
+    option (google.api.http) = {get: "/v1/orders/{id}"};
+  }
+  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse) {
+    option (google.api.http) = {get: "/v1/orders"};
+  }
+  rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse) {
+    option (google.api.http) = {
+      patch: "/v1/orders/{id}/status"
+      body: "*"
+    };
+  }
+}

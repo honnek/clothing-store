@@ -26,6 +26,11 @@ type Config struct {
 
 	// CatalogGRPCAddr — адрес catalog-service для межсервисных gRPC-вызовов (cart/order).
 	CatalogGRPCAddr string `env:"CATALOG_GRPC_ADDR" envDefault:"catalog-service:9090"`
+	// CartGRPCAddr — адрес cart-service: из него order забирает состав заказа.
+	CartGRPCAddr string `env:"CART_GRPC_ADDR" envDefault:"cart-service:9090"`
+
+	// RunMigrations: goose-миграции Go-части накатывает order-service, он ими и владеет.
+	RunMigrations bool `env:"RUN_MIGRATIONS" envDefault:"true"`
 
 	// OTLPEndpoint: пустое значение полностью выключает трейсинг (удобно в dev).
 	OTLPEndpoint string `env:"OTEL_EXPORTER_OTLP_ENDPOINT"`

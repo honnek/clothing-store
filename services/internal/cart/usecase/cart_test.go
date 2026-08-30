@@ -26,6 +26,10 @@ func (m *memRepo) Remove(_ context.Context, _, uuid string) error {
 	delete(m.items, uuid)
 	return nil
 }
+func (m *memRepo) Clear(_ context.Context, _ string) error {
+	m.items = map[string]int32{}
+	return nil
+}
 func (m *memRepo) Items(_ context.Context, _ string) (map[string]int32, error) {
 	return m.items, nil
 }

@@ -53,6 +53,13 @@ func (s *Server) RemoveItem(ctx context.Context, req *cartv1.RemoveItemRequest) 
 	return &cartv1.RemoveItemResponse{Cart: toProto(cart)}, nil
 }
 
+func (s *Server) ClearCart(ctx context.Context, req *cartv1.ClearCartRequest) (*cartv1.ClearCartResponse, error) {
+	if err := s.svc.Clear(ctx, req.GetSessionId()); err != nil {
+		return nil, toStatus(err)
+	}
+	return &cartv1.ClearCartResponse{}, nil
+}
+
 func toStatus(err error) error {
 	switch {
 	case errors.Is(err, domain.ErrProductNotFound):

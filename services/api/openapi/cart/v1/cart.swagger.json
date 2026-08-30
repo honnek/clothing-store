@@ -44,6 +44,34 @@
         "tags": [
           "CartService"
         ]
+      },
+      "delete": {
+        "operationId": "CartService_ClearCart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ClearCartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "CartService"
+        ]
       }
     },
     "/v1/carts/{sessionId}/items": {
@@ -259,6 +287,9 @@
           "type": "string"
         }
       }
+    },
+    "v1ClearCartResponse": {
+      "type": "object"
     },
     "v1GetCartResponse": {
       "type": "object",

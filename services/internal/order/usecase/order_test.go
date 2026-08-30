@@ -14,11 +14,19 @@ type fakeRepo struct {
 	gotLines []domain.CheckoutLine
 	gotPage  domain.Page
 	err      error
+	byKey    map[string]domain.Order
 }
 
 func (f *fakeRepo) Checkout(_ context.Context, _ domain.CheckoutRequest, lines []domain.CheckoutLine) (domain.Order, error) {
 	f.gotLines = lines
 	return domain.Order{ID: 1}, f.err
+}
+func (f *fakeRepo) OrderByIdempotencyKey(_ context.Context, key string) (domain.Order, error) {
+	o, ok := f.byKey[key]
+	if !ok {
+		return domain.Order{}, domain.ErrOrderNotFound
+	}
+	return o, nil
 }
 func (f *fakeRepo) Get(context.Context, int32) (domain.Order, error) { return domain.Order{}, nil }
 func (f *fakeRepo) List(_ context.Context, _ domain.OrderFilter, p domain.Page) (domain.OrderList, error) {
@@ -74,6 +82,21 @@ func TestCheckoutRejectsBadInput(t *testing.T) {
 			t.Fatalf("err = %v, want ErrEmptyCart", err)
 		}
 	})
+}
+
+// Ретрай checkout-а приходит уже с пустой корзиной: заказ по ключу должен вернуться
+// прежний, иначе клиент, не дождавшийся первого ответа, увидит «корзина пуста».
+func TestCheckoutRetryAfterCartCleared(t *testing.T) {
+	repo := &fakeRepo{byKey: map[string]domain.Order{"k1": {ID: 42}}}
+	o := newOrder(repo, &fakeCart{items: map[string]int32{}})
+
+	order, err := o.Checkout(context.Background(), req())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if order.ID != 42 {
+		t.Fatalf("order id = %d, want 42", order.ID)
+	}
 }
 
 func TestCheckoutBuildsStableLines(t *testing.T) {

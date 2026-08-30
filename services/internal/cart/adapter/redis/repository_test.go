@@ -60,3 +60,23 @@ func TestSetQtyAndRemove(t *testing.T) {
 		t.Fatalf("want empty cart, got %+v", items)
 	}
 }
+
+func TestClearDropsWholeCart(t *testing.T) {
+	r := newRepo(t)
+	ctx := context.Background()
+
+	_ = r.Add(ctx, "s1", "hat", 1)
+	_ = r.Add(ctx, "s1", "shoe", 2)
+	_ = r.Add(ctx, "s2", "hat", 1)
+
+	if err := r.Clear(ctx, "s1"); err != nil {
+		t.Fatal(err)
+	}
+
+	if items, _ := r.Items(ctx, "s1"); len(items) != 0 {
+		t.Fatalf("s1: want empty, got %+v", items)
+	}
+	if items, _ := r.Items(ctx, "s2"); items["hat"] != 1 {
+		t.Fatalf("s2 задет чужой очисткой: %+v", items)
+	}
+}

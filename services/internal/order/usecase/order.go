@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 	"sort"
 
@@ -18,6 +19,7 @@ const (
 // транзакции знает только адаптер.
 type Repository interface {
 	Checkout(ctx context.Context, req domain.CheckoutRequest, lines []domain.CheckoutLine) (domain.Order, error)
+	OrderByIdempotencyKey(ctx context.Context, key string) (domain.Order, error)
 	Get(ctx context.Context, id int32) (domain.Order, error)
 	List(ctx context.Context, f domain.OrderFilter, p domain.Page) (domain.OrderList, error)
 	UpdateStatus(ctx context.Context, id int32, to domain.Status) (domain.Order, error)
@@ -48,9 +50,6 @@ func (o *Order) Checkout(ctx context.Context, req domain.CheckoutRequest) (domai
 	if err != nil {
 		return domain.Order{}, err
 	}
-	if len(qtys) == 0 {
-		return domain.Order{}, domain.ErrEmptyCart
-	}
 
 	lines := make([]domain.CheckoutLine, 0, len(qtys))
 	for uuid, qty := range qtys {
@@ -60,7 +59,18 @@ func (o *Order) Checkout(ctx context.Context, req domain.CheckoutRequest) (domai
 		lines = append(lines, domain.CheckoutLine{ProductUUID: uuid, Quantity: qty})
 	}
 	if len(lines) == 0 {
-		return domain.Order{}, domain.ErrEmptyCart
+		// Пустая корзина у ретрая — обычное дело: первый запрос успел оформить заказ
+		// и почистить её, а ответ до клиента не дошёл. Ключ идемпотентности решает,
+		// какой из двух случаев перед нами.
+		order, err := o.repo.OrderByIdempotencyKey(ctx, req.IdempotencyKey)
+		switch {
+		case err == nil:
+			return order, nil
+		case errors.Is(err, domain.ErrOrderNotFound):
+			return domain.Order{}, domain.ErrEmptyCart
+		default:
+			return domain.Order{}, err
+		}
 	}
 	// Порядок из map случайный, а состав заказа должен быть воспроизводимым.
 	sort.Slice(lines, func(i, j int) bool { return lines[i].ProductUUID < lines[j].ProductUUID })

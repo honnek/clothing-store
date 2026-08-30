@@ -8,20 +8,20 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 
-	catalogv1 "github.com/honnek/lumewear-shop/services/api/gen/catalog/v1"
+	orderv1 "github.com/honnek/lumewear-shop/services/api/gen/order/v1"
 	"github.com/honnek/lumewear-shop/services/api/openapi"
-	cacheadapter "github.com/honnek/lumewear-shop/services/internal/catalog/adapter/cache"
-	grpcadapter "github.com/honnek/lumewear-shop/services/internal/catalog/adapter/grpc"
-	pgadapter "github.com/honnek/lumewear-shop/services/internal/catalog/adapter/postgres"
-	"github.com/honnek/lumewear-shop/services/internal/catalog/transport"
-	"github.com/honnek/lumewear-shop/services/internal/catalog/usecase"
+	"github.com/honnek/lumewear-shop/services/internal/order/adapter/cartclient"
+	grpcadapter "github.com/honnek/lumewear-shop/services/internal/order/adapter/grpc"
+	pgadapter "github.com/honnek/lumewear-shop/services/internal/order/adapter/postgres"
+	"github.com/honnek/lumewear-shop/services/internal/order/transport"
+	"github.com/honnek/lumewear-shop/services/internal/order/usecase"
 	"github.com/honnek/lumewear-shop/services/internal/platform/config"
 	"github.com/honnek/lumewear-shop/services/internal/platform/gateway"
 	"github.com/honnek/lumewear-shop/services/internal/platform/grpcserver"
@@ -31,14 +31,12 @@ import (
 	"github.com/honnek/lumewear-shop/services/internal/platform/metrics"
 	"github.com/honnek/lumewear-shop/services/internal/platform/otel"
 	"github.com/honnek/lumewear-shop/services/internal/platform/postgres"
-	"github.com/honnek/lumewear-shop/services/internal/platform/redis"
+	"github.com/honnek/lumewear-shop/services/migrations"
 )
-
-const cacheTTL = time.Minute
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintln(os.Stderr, "catalog-service:", err)
+		fmt.Fprintln(os.Stderr, "order-service:", err)
 		os.Exit(1)
 	}
 }
@@ -47,6 +45,9 @@ func run() error {
 	cfg, err := config.Load()
 	if err != nil {
 		return fmt.Errorf("load config: %w", err)
+	}
+	if cfg.PostgresDSN == "" {
+		return fmt.Errorf("POSTGRES_DSN is required")
 	}
 
 	logger := log.New(cfg.LogLevel, cfg.Env)
@@ -66,21 +67,29 @@ func run() error {
 		}
 	}()
 
+	if cfg.RunMigrations {
+		if err := migrations.Up(cfg.PostgresDSN); err != nil {
+			return fmt.Errorf("migrate: %w", err)
+		}
+		logger.Info("migrations applied")
+	}
+
 	pool, err := postgres.New(ctx, cfg.PostgresDSN)
 	if err != nil {
 		return fmt.Errorf("connect postgres: %w", err)
 	}
 	defer pool.Close()
 
-	rdb, err := redis.New(ctx, cfg.RedisAddr, cfg.RedisDB)
+	cartConn, err := grpc.NewClient(cfg.CartGRPCAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
+	)
 	if err != nil {
-		return fmt.Errorf("connect redis: %w", err)
+		return fmt.Errorf("dial cart: %w", err)
 	}
-	defer func() { _ = rdb.Close() }()
+	defer func() { _ = cartConn.Close() }()
 
-	// Кеш оборачивает postgres; usecase знает только про интерфейс Repository.
-	repo := cacheadapter.New(pgadapter.New(pool), rdb, cacheTTL)
-	svc := usecase.New(repo)
+	svc := usecase.New(pgadapter.New(pool), cartclient.New(cartConn), logger)
 
 	lis, err := net.Listen("tcp", cfg.GRPCAddr)
 	if err != nil {
@@ -90,27 +99,26 @@ func run() error {
 		grpc.StatsHandler(otelgrpc.NewServerHandler()),
 		grpc.UnaryInterceptor(metrics.UnaryServerInterceptor()),
 	)
-	catalogv1.RegisterCatalogServiceServer(grpcSrv.Grpc(), grpcadapter.NewServer(svc))
+	orderv1.RegisterOrderServiceServer(grpcSrv.Grpc(), grpcadapter.NewServer(svc))
 	reflection.Register(grpcSrv.Grpc())
-
-	hc := health.New()
-	hc.Register("postgres", pool.Ping)
-	hc.Register("redis", func(ctx context.Context) error { return rdb.Ping(ctx).Err() })
 
 	gw, err := transport.NewGateway(ctx, cfg.GRPCAddr)
 	if err != nil {
 		return fmt.Errorf("gateway: %w", err)
 	}
 
+	hc := health.New()
+	hc.Register("postgres", pool.Ping)
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", hc.Live)
 	mux.HandleFunc("/readyz", hc.Ready)
 	mux.Handle("/metrics", metrics.Handler())
 	mux.Handle("/v1/", gw)
-	mux.Handle("/swagger/", http.StripPrefix("/swagger", gateway.SwaggerHandler(openapi.Catalog, "Catalog API")))
+	mux.Handle("/swagger/", http.StripPrefix("/swagger", gateway.SwaggerHandler(openapi.Order, "Order API")))
 	httpSrv := httpserver.New(cfg.HTTPAddr, mux)
 
-	logger.Info("catalog-service started", "grpc", cfg.GRPCAddr, "http", cfg.HTTPAddr)
+	logger.Info("order-service started", "grpc", cfg.GRPCAddr, "http", cfg.HTTPAddr, "cart", cfg.CartGRPCAddr)
 
 	g, gctx := errgroup.WithContext(ctx)
 	g.Go(func() error { return grpcSrv.Run(gctx) })
@@ -119,6 +127,6 @@ func run() error {
 	if err := g.Wait(); err != nil {
 		return err
 	}
-	logger.Info("catalog-service stopped")
+	logger.Info("order-service stopped")
 	return nil
 }

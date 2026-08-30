@@ -43,6 +43,14 @@ func (r *Repository) Remove(ctx context.Context, session, uuid string) error {
 	return nil
 }
 
+// Clear убирает корзину целиком — зовётся order-сервисом после оформления заказа.
+func (r *Repository) Clear(ctx context.Context, session string) error {
+	if err := r.rdb.Del(ctx, key(session)).Err(); err != nil {
+		return fmt.Errorf("del: %w", err)
+	}
+	return nil
+}
+
 func (r *Repository) Items(ctx context.Context, session string) (map[string]int32, error) {
 	raw, err := r.rdb.HGetAll(ctx, key(session)).Result()
 	if err != nil {

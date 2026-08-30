@@ -6,6 +6,11 @@ deps:
 lint:
   use:
     - DEFAULT
+  # Нулевой статус заказа — не заглушка: колонка "order".status общая с монолитом,
+  # где 0 это CREATED. Добавлять UNSPECIFIED значило бы сдвинуть все значения.
+  ignore_only:
+    ENUM_ZERO_VALUE_SUFFIX:
+      - api/proto/order/v1/order.proto
 breaking:
   use:
     - FILE

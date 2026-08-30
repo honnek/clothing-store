@@ -27,6 +27,10 @@ func (m *memRepo) SetQty(_ context.Context, _, uuid string, qty int32) error {
 	return nil
 }
 func (m *memRepo) Remove(_ context.Context, _, uuid string) error { delete(m.items, uuid); return nil }
+func (m *memRepo) Clear(_ context.Context, _ string) error {
+	m.items = map[string]int32{}
+	return nil
+}
 func (m *memRepo) Items(_ context.Context, _ string) (map[string]int32, error) {
 	return m.items, nil
 }
@@ -88,5 +92,25 @@ func TestAddItemErrors(t *testing.T) {
 	_, err = c.AddItem(context.Background(), &cartv1.AddItemRequest{SessionId: "s1", ProductUuid: "hat", Quantity: 0})
 	if status.Code(err) != codes.InvalidArgument {
 		t.Errorf("qty 0: code = %s, want InvalidArgument", status.Code(err))
+	}
+}
+
+func TestClearCart(t *testing.T) {
+	c := newClient(t)
+	ctx := context.Background()
+
+	if _, err := c.AddItem(ctx, &cartv1.AddItemRequest{SessionId: "s1", ProductUuid: "hat", Quantity: 2}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := c.ClearCart(ctx, &cartv1.ClearCartRequest{SessionId: "s1"}); err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.GetCart(ctx, &cartv1.GetCartRequest{SessionId: "s1"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(resp.Cart.Items) != 0 || resp.Cart.Total != "0.00" {
+		t.Fatalf("got %+v", resp.Cart)
 	}
 }

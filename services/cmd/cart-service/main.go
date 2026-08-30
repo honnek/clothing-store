@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -27,6 +28,7 @@ import (
 	"github.com/honnek/lumewear-shop/services/internal/platform/health"
 	"github.com/honnek/lumewear-shop/services/internal/platform/httpserver"
 	"github.com/honnek/lumewear-shop/services/internal/platform/log"
+	"github.com/honnek/lumewear-shop/services/internal/platform/metrics"
 	"github.com/honnek/lumewear-shop/services/internal/platform/otel"
 	"github.com/honnek/lumewear-shop/services/internal/platform/redis"
 )
@@ -67,7 +69,10 @@ func run() error {
 	}
 	defer func() { _ = rdb.Close() }()
 
-	catalogConn, err := grpc.NewClient(cfg.CatalogGRPCAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	catalogConn, err := grpc.NewClient(cfg.CatalogGRPCAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
+	)
 	if err != nil {
 		return fmt.Errorf("dial catalog: %w", err)
 	}
@@ -79,7 +84,10 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("listen grpc: %w", err)
 	}
-	grpcSrv := grpcserver.New(lis)
+	grpcSrv := grpcserver.New(lis,
+		grpc.StatsHandler(otelgrpc.NewServerHandler()),
+		grpc.UnaryInterceptor(metrics.UnaryServerInterceptor()),
+	)
 	cartv1.RegisterCartServiceServer(grpcSrv.Grpc(), grpcadapter.NewServer(svc))
 	reflection.Register(grpcSrv.Grpc())
 
@@ -94,6 +102,7 @@ func run() error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", hc.Live)
 	mux.HandleFunc("/readyz", hc.Ready)
+	mux.Handle("/metrics", metrics.Handler())
 	mux.Handle("/v1/", gw)
 	mux.Handle("/swagger/", http.StripPrefix("/swagger", gateway.SwaggerHandler(openapi.Cart, "Cart API")))
 	httpSrv := httpserver.New(cfg.HTTPAddr, mux)

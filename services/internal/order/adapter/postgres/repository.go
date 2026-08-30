@@ -190,6 +190,15 @@ func (r *Repository) Get(ctx context.Context, id int32) (domain.Order, error) {
 	return r.get(ctx, r.q, id)
 }
 
+// OrderByIdempotencyKey отдаёт заказ, ранее оформленный по этому ключу.
+func (r *Repository) OrderByIdempotencyKey(ctx context.Context, key string) (domain.Order, error) {
+	order, err := r.byIdempotencyKey(ctx, key)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return domain.Order{}, domain.ErrOrderNotFound
+	}
+	return order, err
+}
+
 func (r *Repository) List(ctx context.Context, f domain.OrderFilter, p domain.Page) (domain.OrderList, error) {
 	var status *int32
 	if f.Status != nil {
