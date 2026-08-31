@@ -1,0 +1,76 @@
+{
+  "title": "Lumewear Shop — Go services",
+  "uid": "lumewear-shop",
+  "timezone": "browser",
+  "refresh": "10s",
+  "time": { "from": "now-1h", "to": "now" },
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "gRPC RPS по сервисам",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum by (job, service) (rate(grpc_server_requests_total[1m]))",
+          "legendFormat": "{{service}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Ошибки gRPC (код != OK)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum by (service, code) (rate(grpc_server_requests_total{code!=\"OK\"}[1m]))",
+          "legendFormat": "{{service}} {{code}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Задержка gRPC, p95",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (le, service, method) (rate(grpc_server_request_duration_seconds_bucket[5m])))",
+          "legendFormat": "{{service}}/{{method}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] }
+    },
+    {
+      "type": "timeseries",
+      "title": "Лаг outbox (неопубликованные события)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        { "expr": "outbox_pending_events", "legendFormat": "pending" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Публикации outbox и письма",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "expr": "sum by (event_type) (rate(outbox_events_published_total[1m]))",
+          "legendFormat": "published {{event_type}}"
+        },
+        { "expr": "rate(notifications_sent_total[1m])", "legendFormat": "letters sent" },
+        {
+          "expr": "sum by (reason) (rate(notifications_skipped_total[1m]))",
+          "legendFormat": "skipped {{reason}}"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Сбои relay за час",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "targets": [
+        { "expr": "increase(outbox_relay_failures_total[1h])", "legendFormat": "failures" }
+      ]
+    }
+  ],
+  "schemaVersion": 39
+}

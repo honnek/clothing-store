@@ -120,6 +120,7 @@ services:
       - GRPC_ADDR=:9090
       - REDIS_ADDR=redis:6379
       - POSTGRES_DSN=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
     depends_on:
       redis:
         condition: service_healthy
@@ -143,6 +144,7 @@ services:
       - GRPC_ADDR=:9090
       - REDIS_ADDR=redis:6379
       - CATALOG_GRPC_ADDR=catalog-service:9090
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
     depends_on:
       redis:
         condition: service_healthy
@@ -166,14 +168,114 @@ services:
       - GRPC_ADDR=:9090
       - CART_GRPC_ADDR=cart-service:9090
       - POSTGRES_DSN=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      - KAFKA_BROKERS=redpanda:29092
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
     depends_on:
       postgres:
         condition: service_started
       cart-service:
         condition: service_started
+      redpanda:
+        condition: service_healthy
     ports:
       - "8083:8080"   # REST + health + swagger + metrics
       - "9093:9090"   # gRPC
+
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v23.3.11
+    container_name: redpanda
+    restart: always
+    command:
+      - redpanda
+      - start
+      - --smp=1
+      - --overprovisioned
+      - --mode=dev-container
+      - --kafka-addr=PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr=PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+      # Топики заводит первый продюсер: в dev никто не хочет создавать их руками.
+      - --set
+      - redpanda.auto_create_topics_enabled=true
+    ports:
+      - "9092:9092"    # Kafka снаружи (rpk/kcat с хоста)
+      - "9644:9644"    # admin API
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -q 'Healthy:.*true'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: mailpit
+    restart: always
+    ports:
+      - "8025:8025"    # веб-интерфейс с пришедшими письмами
+      - "1025:1025"    # SMTP
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: jaeger
+    restart: always
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"  # UI
+      - "4318:4318"    # OTLP/HTTP — сюда шлют спаны Go-сервисы
+
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ./services/deploy/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:10.4.3
+    container_name: grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    volumes:
+      - ./services/deploy/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./services/deploy/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3001:3000"
+
+  notifications-worker:
+    build:
+      context: ./services
+      args:
+        SERVICE: notifications-worker
+    container_name: notifications-worker
+    restart: always
+    environment:
+      - SERVICE_NAME=notifications-worker
+      - APP_ENV=dev
+      - HTTP_ADDR=:8080
+      - REDIS_ADDR=redis:6379
+      - KAFKA_BROKERS=redpanda:29092
+      - SMTP_ADDR=mailpit:1025
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+    depends_on:
+      redis:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    ports:
+      - "8084:8080"   # health + metrics
 
 
 
@@ -236,6 +338,9 @@ volumes:
   db_data:
   pgadmin:
   redis_data:
+  redpanda_data:
+  prometheus_data:
+  grafana_data:
 #  jenkins_home:
 #  docker_certs:
 #  docker_data:

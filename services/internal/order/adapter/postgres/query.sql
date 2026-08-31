@@ -49,13 +49,30 @@ INSERT INTO checkout_idempotency (key, session_id, order_id)
 VALUES (sqlc.arg('key'), sqlc.arg('session_id'), sqlc.arg('order_id'));
 
 -- name: InsertOutboxEvent :exec
-INSERT INTO outbox (aggregate_type, aggregate_id, event_type, payload)
+INSERT INTO outbox (aggregate_type, aggregate_id, event_type, payload, traceparent)
 VALUES (
     sqlc.arg('aggregate_type'),
     sqlc.arg('aggregate_id'),
     sqlc.arg('event_type'),
-    sqlc.arg('payload')
+    sqlc.arg('payload'),
+    sqlc.narg('traceparent')
 );
+
+-- name: LockOutboxBatch :many
+-- SKIP LOCKED вместо NOWAIT: несколько реплик order-service крутят relay одновременно,
+-- и каждая должна забрать свою пачку, а не ждать чужую транзакцию.
+SELECT id, aggregate_id, event_type, payload, traceparent
+FROM outbox
+WHERE published_at IS NULL
+ORDER BY id
+LIMIT sqlc.arg('lim')
+FOR UPDATE SKIP LOCKED;
+
+-- name: MarkOutboxPublished :exec
+UPDATE outbox SET published_at = now() WHERE id = ANY(sqlc.arg('ids')::bigint[]);
+
+-- name: CountPendingOutbox :one
+SELECT count(*) FROM outbox WHERE published_at IS NULL;
 
 -- name: GetOrder :one
 SELECT

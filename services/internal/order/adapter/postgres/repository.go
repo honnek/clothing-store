@@ -14,6 +14,7 @@ import (
 
 	"github.com/honnek/lumewear-shop/services/internal/order/adapter/postgres/orderdb"
 	"github.com/honnek/lumewear-shop/services/internal/order/domain"
+	"github.com/honnek/lumewear-shop/services/internal/platform/otel"
 )
 
 const (
@@ -171,11 +172,16 @@ func (r *Repository) checkoutTx(ctx context.Context, req domain.CheckoutRequest,
 	if err != nil {
 		return domain.Order{}, fmt.Errorf("marshal event: %w", err)
 	}
+	var traceparent *string
+	if tp := otel.Carrier(ctx)["traceparent"]; tp != "" {
+		traceparent = &tp
+	}
 	if err := q.InsertOutboxEvent(ctx, orderdb.InsertOutboxEventParams{
 		AggregateType: outboxAggregate,
 		AggregateID:   fmt.Sprint(order.ID),
 		EventType:     eventOrderCreated,
 		Payload:       payload,
+		Traceparent:   traceparent,
 	}); err != nil {
 		return domain.Order{}, fmt.Errorf("insert outbox: %w", err)
 	}
@@ -272,6 +278,61 @@ func (r *Repository) UpdateStatus(ctx context.Context, id int32, to domain.Statu
 		return domain.Order{}, fmt.Errorf("commit: %w", err)
 	}
 	return order, nil
+}
+
+// DrainOutbox забирает пачку неопубликованных событий и отдаёт их publish, не выходя
+// из транзакции: пометка published_at коммитится вместе с успешной публикацией.
+// Порядок именно такой — publish до коммита. Если брокер принял, а коммит не прошёл,
+// событие уедет повторно (доставка at-least-once, потребитель дедуплицирует);
+// обратный порядок дал бы потерю события, что чинится куда хуже.
+func (r *Repository) DrainOutbox(ctx context.Context, batch int32, publish func(context.Context, []domain.OutboxEvent) error) (int, error) {
+	tx, err := r.pool.Begin(ctx)
+	if err != nil {
+		return 0, fmt.Errorf("begin: %w", err)
+	}
+	defer tx.Rollback(ctx) //nolint:errcheck // после Commit это no-op
+
+	q := r.q.WithTx(tx)
+
+	rows, err := q.LockOutboxBatch(ctx, batch)
+	if err != nil {
+		return 0, fmt.Errorf("lock outbox: %w", err)
+	}
+	if len(rows) == 0 {
+		return 0, nil
+	}
+
+	events := make([]domain.OutboxEvent, 0, len(rows))
+	ids := make([]int64, 0, len(rows))
+	for _, row := range rows {
+		e := domain.OutboxEvent{
+			ID:          row.ID,
+			AggregateID: row.AggregateID,
+			Type:        row.EventType,
+			Payload:     row.Payload,
+		}
+		if row.Traceparent != nil {
+			e.Traceparent = *row.Traceparent
+		}
+		events = append(events, e)
+		ids = append(ids, row.ID)
+	}
+
+	if err := publish(ctx, events); err != nil {
+		return 0, err
+	}
+	if err := q.MarkOutboxPublished(ctx, ids); err != nil {
+		return 0, fmt.Errorf("mark published: %w", err)
+	}
+	if err := tx.Commit(ctx); err != nil {
+		return 0, fmt.Errorf("commit: %w", err)
+	}
+	return len(events), nil
+}
+
+// PendingOutbox — длина очереди неопубликованных событий, её relay отдаёт в метрику.
+func (r *Repository) PendingOutbox(ctx context.Context) (int64, error) {
+	return r.q.CountPendingOutbox(ctx)
 }
 
 func (r *Repository) byIdempotencyKey(ctx context.Context, key string) (domain.Order, error) {

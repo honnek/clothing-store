@@ -19,6 +19,7 @@ import (
 	"github.com/honnek/lumewear-shop/services/api/openapi"
 	"github.com/honnek/lumewear-shop/services/internal/order/adapter/cartclient"
 	grpcadapter "github.com/honnek/lumewear-shop/services/internal/order/adapter/grpc"
+	"github.com/honnek/lumewear-shop/services/internal/order/adapter/outbox"
 	pgadapter "github.com/honnek/lumewear-shop/services/internal/order/adapter/postgres"
 	"github.com/honnek/lumewear-shop/services/internal/order/transport"
 	"github.com/honnek/lumewear-shop/services/internal/order/usecase"
@@ -27,6 +28,7 @@ import (
 	"github.com/honnek/lumewear-shop/services/internal/platform/grpcserver"
 	"github.com/honnek/lumewear-shop/services/internal/platform/health"
 	"github.com/honnek/lumewear-shop/services/internal/platform/httpserver"
+	"github.com/honnek/lumewear-shop/services/internal/platform/kafka"
 	"github.com/honnek/lumewear-shop/services/internal/platform/log"
 	"github.com/honnek/lumewear-shop/services/internal/platform/metrics"
 	"github.com/honnek/lumewear-shop/services/internal/platform/otel"
@@ -89,7 +91,23 @@ func run() error {
 	}
 	defer func() { _ = cartConn.Close() }()
 
-	svc := usecase.New(pgadapter.New(pool), cartclient.New(cartConn), logger)
+	repo := pgadapter.New(pool)
+	svc := usecase.New(repo, cartclient.New(cartConn), logger)
+
+	// Relay живёт в том же процессе, что и checkout: отдельный бинарь ничего не
+	// упрощает, а SKIP LOCKED в запросе разводит реплики без координации.
+	var relay *outbox.Relay
+	if len(cfg.KafkaBrokers) > 0 {
+		producer, err := kafka.NewProducer(cfg.KafkaBrokers)
+		if err != nil {
+			return err
+		}
+		defer producer.Close()
+
+		relay = outbox.NewRelay(repo, producer, logger, cfg.OrderTopic, cfg.OutboxBatch, cfg.OutboxInterval)
+	} else {
+		logger.Warn("KAFKA_BROKERS is empty, outbox relay disabled")
+	}
 
 	lis, err := net.Listen("tcp", cfg.GRPCAddr)
 	if err != nil {
@@ -123,6 +141,9 @@ func run() error {
 	g, gctx := errgroup.WithContext(ctx)
 	g.Go(func() error { return grpcSrv.Run(gctx) })
 	g.Go(func() error { return httpSrv.Run(gctx, cfg.ShutdownTimeout) })
+	if relay != nil {
+		g.Go(func() error { return relay.Run(gctx) })
+	}
 
 	if err := g.Wait(); err != nil {
 		return err

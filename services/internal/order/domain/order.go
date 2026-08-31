@@ -153,6 +153,17 @@ type OrderList struct {
 	Total int64   `json:"total"`
 }
 
+// OutboxEvent — строка outbox, которую relay забирает и публикует в брокер.
+// Traceparent — W3C-контекст трейса, в котором событие родилось (пусто, если
+// трейсинг выключен).
+type OutboxEvent struct {
+	ID          int64
+	AggregateID string
+	Type        string
+	Payload     []byte
+	Traceparent string
+}
+
 // OrderCreated — полезная нагрузка события order.created, которое checkout кладёт
 // в outbox. Уходит в Kafka как есть, поэтому поля снимочные, без ссылок на каталог.
 type OrderCreated struct {

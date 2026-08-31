@@ -31,6 +31,17 @@ func (q *Queries) CountOrders(ctx context.Context, arg CountOrdersParams) (int64
 	return count, err
 }
 
+const countPendingOutbox = `-- name: CountPendingOutbox :one
+SELECT count(*) FROM outbox WHERE published_at IS NULL
+`
+
+func (q *Queries) CountPendingOutbox(ctx context.Context) (int64, error) {
+	row := q.db.QueryRow(ctx, countPendingOutbox)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const getOrder = `-- name: GetOrder :one
 SELECT
     id,
@@ -145,20 +156,22 @@ func (q *Queries) InsertOrderProduct(ctx context.Context, arg InsertOrderProduct
 }
 
 const insertOutboxEvent = `-- name: InsertOutboxEvent :exec
-INSERT INTO outbox (aggregate_type, aggregate_id, event_type, payload)
+INSERT INTO outbox (aggregate_type, aggregate_id, event_type, payload, traceparent)
 VALUES (
     $1,
     $2,
     $3,
-    $4
+    $4,
+    $5
 )
 `
 
 type InsertOutboxEventParams struct {
-	AggregateType string `json:"aggregate_type"`
-	AggregateID   string `json:"aggregate_id"`
-	EventType     string `json:"event_type"`
-	Payload       []byte `json:"payload"`
+	AggregateType string  `json:"aggregate_type"`
+	AggregateID   string  `json:"aggregate_id"`
+	EventType     string  `json:"event_type"`
+	Payload       []byte  `json:"payload"`
+	Traceparent   *string `json:"traceparent"`
 }
 
 func (q *Queries) InsertOutboxEvent(ctx context.Context, arg InsertOutboxEventParams) error {
@@ -167,6 +180,7 @@ func (q *Queries) InsertOutboxEvent(ctx context.Context, arg InsertOutboxEventPa
 		arg.AggregateID,
 		arg.EventType,
 		arg.Payload,
+		arg.Traceparent,
 	)
 	return err
 }
@@ -293,6 +307,51 @@ func (q *Queries) LockOrderStatus(ctx context.Context, id int32) (int32, error) 
 	return status, err
 }
 
+const lockOutboxBatch = `-- name: LockOutboxBatch :many
+SELECT id, aggregate_id, event_type, payload, traceparent
+FROM outbox
+WHERE published_at IS NULL
+ORDER BY id
+LIMIT $1
+FOR UPDATE SKIP LOCKED
+`
+
+type LockOutboxBatchRow struct {
+	ID          int64   `json:"id"`
+	AggregateID string  `json:"aggregate_id"`
+	EventType   string  `json:"event_type"`
+	Payload     []byte  `json:"payload"`
+	Traceparent *string `json:"traceparent"`
+}
+
+// SKIP LOCKED вместо NOWAIT: несколько реплик order-service крутят relay одновременно,
+// и каждая должна забрать свою пачку, а не ждать чужую транзакцию.
+func (q *Queries) LockOutboxBatch(ctx context.Context, lim int32) ([]LockOutboxBatchRow, error) {
+	rows, err := q.db.Query(ctx, lockOutboxBatch, lim)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LockOutboxBatchRow
+	for rows.Next() {
+		var i LockOutboxBatchRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.AggregateID,
+			&i.EventType,
+			&i.Payload,
+			&i.Traceparent,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const lockProductsForCheckout = `-- name: LockProductsForCheckout :many
 SELECT
     id,
@@ -342,6 +401,15 @@ func (q *Queries) LockProductsForCheckout(ctx context.Context, uuids []pgtype.UU
 		return nil, err
 	}
 	return items, nil
+}
+
+const markOutboxPublished = `-- name: MarkOutboxPublished :exec
+UPDATE outbox SET published_at = now() WHERE id = ANY($1::bigint[])
+`
+
+func (q *Queries) MarkOutboxPublished(ctx context.Context, ids []int64) error {
+	_, err := q.db.Exec(ctx, markOutboxPublished, ids)
+	return err
 }
 
 const orderIDByIdempotencyKey = `-- name: OrderIDByIdempotencyKey :one

@@ -455,3 +455,125 @@ func setStock(t *testing.T, pool *pgxpool.Pool, uuid string, n int32) {
 		t.Fatalf("set stock: %v", err)
 	}
 }
+
+func TestDrainOutbox(t *testing.T) {
+	repo, pool := setupRepo(t)
+	ctx := context.Background()
+
+	order, err := repo.Checkout(ctx, req("key-drain", "s-drain"), []domain.CheckoutLine{
+		{ProductUUID: redHat, Quantity: 1},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("keeps events when publishing fails", func(t *testing.T) {
+		broker := errors.New("broker down")
+		_, err := repo.DrainOutbox(ctx, 10, func(context.Context, []domain.OutboxEvent) error {
+			return broker
+		})
+		if !errors.Is(err, broker) {
+			t.Fatalf("err = %v, want broker down", err)
+		}
+
+		left, err := repo.PendingOutbox(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if left != 1 {
+			t.Fatalf("pending = %d, want 1: откат обязан вернуть событие в очередь", left)
+		}
+	})
+
+	t.Run("marks published after a successful publish", func(t *testing.T) {
+		var got []domain.OutboxEvent
+		n, err := repo.DrainOutbox(ctx, 10, func(_ context.Context, events []domain.OutboxEvent) error {
+			got = events
+			return nil
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if n != 1 || len(got) != 1 {
+			t.Fatalf("drained %d events, want 1", n)
+		}
+		if got[0].Type != "order.created" || got[0].AggregateID != fmt.Sprint(order.ID) {
+			t.Errorf("event = %+v", got[0])
+		}
+
+		left, err := repo.PendingOutbox(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if left != 0 {
+			t.Fatalf("pending = %d, want 0", left)
+		}
+
+		var published int
+		if err := pool.QueryRow(ctx,
+			`SELECT count(*) FROM outbox WHERE aggregate_id = $1 AND published_at IS NOT NULL`,
+			fmt.Sprint(order.ID)).Scan(&published); err != nil {
+			t.Fatal(err)
+		}
+		if published != 1 {
+			t.Fatalf("published rows = %d, want 1", published)
+		}
+	})
+
+	// Вторая пачка на пустой очереди — не ошибка и не пустая транзакция с publish.
+	t.Run("no events left", func(t *testing.T) {
+		n, err := repo.DrainOutbox(ctx, 10, func(context.Context, []domain.OutboxEvent) error {
+			t.Fatal("publish called on empty outbox")
+			return nil
+		})
+		if err != nil || n != 0 {
+			t.Fatalf("drained %d, err %v", n, err)
+		}
+	})
+}
+
+// Две реплики relay не должны забрать одно и то же событие: SKIP LOCKED разводит их
+// без внешней координации.
+func TestDrainOutboxSkipsLockedRows(t *testing.T) {
+	repo, _ := setupRepo(t)
+	ctx := context.Background()
+
+	for i, uuid := range []string{redHat, blueHat} {
+		if _, err := repo.Checkout(ctx, req(fmt.Sprintf("key-skip-%d", i), "s-skip"),
+			[]domain.CheckoutLine{{ProductUUID: uuid, Quantity: 1}}); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	held := make(chan struct{})
+	release := make(chan struct{})
+	var first []domain.OutboxEvent
+
+	go func() {
+		_, _ = repo.DrainOutbox(ctx, 1, func(_ context.Context, events []domain.OutboxEvent) error {
+			first = events
+			close(held)
+			<-release
+			return nil
+		})
+	}()
+
+	<-held
+	second, err := repo.DrainOutbox(ctx, 1, func(_ context.Context, events []domain.OutboxEvent) error {
+		if len(events) != 1 {
+			t.Errorf("second relay got %d events, want 1", len(events))
+		}
+		if len(first) == 1 && events[0].ID == first[0].ID {
+			t.Errorf("both relays picked outbox row %d", events[0].ID)
+		}
+		return nil
+	})
+	close(release)
+
+	if err != nil {
+		t.Fatalf("second drain: %v", err)
+	}
+	if second != 1 {
+		t.Fatalf("second drain took %d events, want 1", second)
+	}
+}

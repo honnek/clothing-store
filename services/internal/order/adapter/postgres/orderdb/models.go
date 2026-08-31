@@ -47,6 +47,7 @@ type Outbox struct {
 	Payload       []byte             `json:"payload"`
 	CreatedAt     pgtype.Timestamptz `json:"created_at"`
 	PublishedAt   pgtype.Timestamptz `json:"published_at"`
+	Traceparent   *string            `json:"traceparent"`
 }
 
 type Product struct {

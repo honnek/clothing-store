@@ -32,6 +32,20 @@ type Config struct {
 	// RunMigrations: goose-миграции Go-части накатывает order-service, он ими и владеет.
 	RunMigrations bool `env:"RUN_MIGRATIONS" envDefault:"true"`
 
+	// KafkaBrokers пуст — order-service не поднимает outbox-relay, а воркер
+	// уведомлений отказывается стартовать: без брокера ему нечего делать.
+	KafkaBrokers []string `env:"KAFKA_BROKERS" envSeparator:","`
+	KafkaGroup   string   `env:"KAFKA_GROUP" envDefault:"notifications"`
+	OrderTopic   string   `env:"KAFKA_ORDER_TOPIC" envDefault:"order.created"`
+
+	OutboxBatch    int32         `env:"OUTBOX_BATCH" envDefault:"50"`
+	OutboxInterval time.Duration `env:"OUTBOX_INTERVAL" envDefault:"1s"`
+
+	SMTPAddr  string        `env:"SMTP_ADDR" envDefault:"mailpit:1025"`
+	MailFrom  string        `env:"MAIL_FROM" envDefault:"shop@lumewear.local"`
+	MailTo    string        `env:"MAIL_TO" envDefault:"orders@lumewear.local"`
+	NotifyTTL time.Duration `env:"NOTIFY_DEDUP_TTL" envDefault:"24h"`
+
 	// OTLPEndpoint: пустое значение полностью выключает трейсинг (удобно в dev).
 	OTLPEndpoint string `env:"OTEL_EXPORTER_OTLP_ENDPOINT"`
 
